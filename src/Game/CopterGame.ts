@@ -19,8 +19,7 @@ export class CopterGame extends Game {
                 min: 40,
                 target: 40,
             },
-            scene: [
-            ],
+            scene: [],
             render: {
                 pixelArt: true,
             },
