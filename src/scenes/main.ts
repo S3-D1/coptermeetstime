@@ -62,7 +62,7 @@ export class Main extends Scene {
                 y: -320 + offset,
                 texture: 'ground',
             });
-            this.currentHeightBottom = random * this.groundMaxSize;
+            this.currentHeightTop = random * this.groundMaxSize;
             this.groundTop.add(g);
         }
     }
@@ -111,7 +111,7 @@ export class Main extends Scene {
                     y: -320 + offset,
                     texture: 'ground',
                 });
-                this.currentHeightBottom = random * this.groundMaxSize;
+                this.currentHeightTop = random * this.groundMaxSize;
                 this.groundTop.add(ng);
             }
         }
