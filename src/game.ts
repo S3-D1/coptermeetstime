@@ -1,9 +1,9 @@
-import { Game, Types } from 'phaser';
-import { Main } from './scenes/Main';
+import { Types } from 'phaser';
+import { Main } from './scenes/main';
 
 const parent: string = 'game';
 
-export class CopterGame extends Game {
+export class Game extends Phaser.Game {
     constructor() {
         const config: Types.Core.GameConfig = {
             type: Phaser.AUTO,

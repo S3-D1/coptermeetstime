@@ -1,6 +1,9 @@
 import { Scene } from 'phaser';
+import { Copter } from '../objects/copter';
 
 export class Main extends Scene {
+    private copter!: Copter;
+
     constructor() {
         super({ key: 'main' });
     }
@@ -13,6 +16,15 @@ export class Main extends Scene {
     }
 
     public create(): void {
-        const player = this.physics.add.sprite(300, 300, 'copter');
+        this.copter = new Copter({
+            scene: this,
+            x: 50,
+            y: 100,
+            texture: 'copter',
+        });
+    }
+
+    public update(): void {
+        this.copter.update();
     }
 }
