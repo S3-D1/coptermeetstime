@@ -41,10 +41,5 @@ export class Copter extends Phaser.GameObjects.Image {
         if (this.jumpKey.isDown) {
             this.body.setVelocityY(-350);
         }
-
-        // check boundaries
-        if(this.y < 0 || this.y + this.height > this.scene.sys.canvas.height) {
-            this.isCrashed = true;
-        }
     }
 }
