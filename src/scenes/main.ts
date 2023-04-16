@@ -7,7 +7,7 @@ export class Main extends Scene {
     private readonly ground: Phaser.GameObjects.Group;
 
     constructor() {
-        super({ key: 'main' });
+        super({ key: 'MainScene' });
 
         this.ground = new Phaser.GameObjects.Group(this);
     }
@@ -56,7 +56,7 @@ export class Main extends Scene {
     public update(): void {
         this.copter.update();
         if (this.copter.isCrashed) {
-            this.add.text(200, 100, 'Game Over!');
+            this.scene.start('MenuScene', {reason: 'fail'});
         }
 
         if (!this.copter.isCrashed) {
