@@ -21,8 +21,8 @@ export class Ground extends Phaser.GameObjects.Image {
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
         this.body.allowGravity = false;
-        // this.body.setVelocityX(-200);
-        this.body.setSize(20, 20);
+        this.body.setVelocityX(-200);
+        this.body.setSize(32, 320);
 
         this.scene.add.existing(this);
     }
