@@ -27,9 +27,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - ref: gh-pages
-      - path: temp
+      - name: deploy to GitHub Pages
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          path: temp
       - run: |
           rm -rf *
           cp -r ../dist/. .
