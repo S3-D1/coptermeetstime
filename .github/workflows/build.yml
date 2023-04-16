@@ -23,3 +23,18 @@ jobs:
     - name: Build
       run: yarn build
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - ref: gh-pages
+      - path: temp
+      - run: |
+          rm -rf *
+          cp -r ../dist/. .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
