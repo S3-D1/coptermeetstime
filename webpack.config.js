@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './index.ts',
@@ -27,6 +28,17 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'index.html'),
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.posix.join(
+                        path.resolve(__dirname, 'assets').replace(/\\/g, '/'),
+                        '*'
+                    ),
+                    to: path.resolve(__dirname, 'dist'),
+                },
+            ],
         }),
     ],
     resolve: {

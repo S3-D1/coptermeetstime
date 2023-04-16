@@ -1,4 +1,5 @@
 import { Game, Types } from 'phaser';
+import { Main } from './scenes/Main';
 
 const parent: string = 'game';
 
@@ -19,7 +20,7 @@ export class CopterGame extends Game {
                 min: 40,
                 target: 40,
             },
-            scene: [],
+            scene: [Main],
             render: {
                 pixelArt: true,
             },
