@@ -4,7 +4,7 @@ import { IImageConstructor } from '../interfaces/image.interface';
 export class Copter extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
 
-    private jumpKey: Phaser.Input.Keyboard.Key;
+    private readonly jumpKey: Phaser.Input.Keyboard.Key;
 
     constructor(aParams: IImageConstructor) {
         super(
