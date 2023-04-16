@@ -2,6 +2,8 @@ name: build
 
 on:
   push:
+    branches:
+    - '!main'
 
 jobs:
   build:
@@ -24,11 +26,13 @@ jobs:
       run: yarn build
 
     - name: deploy to GitHub Pages
+      if: success() && github.ref == 'refs/heads/main'
       uses: actions/checkout@v3
       with:
         ref: gh-pages
         path: temp
     - run: |
+        cd temp
         rm -rf *
         cp -r ../dist/. .
         git config user.name github-actions
