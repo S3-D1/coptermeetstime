@@ -25,13 +25,15 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: deploy to GitHub Pages
+    - name: Checkout GitHub Pages Branch
       if: success() && github.ref == 'refs/heads/main'
       uses: actions/checkout@v3
       with:
         ref: gh-pages
         path: temp
-    - run: |
+    - name: deploy to GitHub Pages
+      if: success() && github.ref == 'refs/heads/main'
+      run: |
         cd temp
         rm -rf *
         cp -r ../dist/. .
