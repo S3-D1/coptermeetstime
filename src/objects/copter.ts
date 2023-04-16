@@ -3,6 +3,7 @@ import { IImageConstructor } from '../interfaces/image.interface';
 
 export class Copter extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
+    isCrashed: boolean;
 
     private readonly jumpKey: Phaser.Input.Keyboard.Key;
 
@@ -14,6 +15,8 @@ export class Copter extends Phaser.GameObjects.Image {
             aParams.texture,
             aParams.frame
         );
+
+        this.isCrashed = false;
 
         // image
         this.setScale(3);
@@ -37,6 +40,11 @@ export class Copter extends Phaser.GameObjects.Image {
         super.update();
         if (this.jumpKey.isDown) {
             this.body.setVelocityY(-350);
+        }
+
+        // check boundaries
+        if(this.y < 0 || this.y + this.height > this.scene.sys.canvas.height) {
+            this.isCrashed = true;
         }
     }
 }

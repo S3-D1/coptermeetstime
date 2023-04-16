@@ -26,5 +26,8 @@ export class Main extends Scene {
 
     public update(): void {
         this.copter.update();
+        if(this.copter.isCrashed){
+            this.add.text(200,100,"Game Over!");
+        }
     }
 }
