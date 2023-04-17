@@ -12,6 +12,9 @@ export class Main extends Scene {
     private currentHeightTop: number;
     private currentHeightBottom: number;
 
+    private newestTopGround!: Ground;
+    private newestBottomGround!: Ground;
+
     constructor() {
         super({ key: 'MainScene' });
 
@@ -38,7 +41,7 @@ export class Main extends Scene {
         });
 
         // generate bottom
-        for (let i = 0; i <= this.sys.game.canvas.width / 32; i++) {
+        for (let i = 0; i < (this.sys.game.canvas.width + 92) / 32; i++) {
             const random = Math.random();
             const offset = random * this.groundMaxSize;
             const g = new Ground({
@@ -48,12 +51,12 @@ export class Main extends Scene {
                 texture: 'ground',
             });
             this.currentHeightBottom = random * this.groundMaxSize;
-            console.log(this.currentHeightBottom);
             this.groundBottom.add(g);
+            this.newestBottomGround = g;
         }
 
         // generate top
-        for (let i = 0; i <= this.sys.game.canvas.width / 32; i++) {
+        for (let i = 0; i < (this.sys.game.canvas.width + 92) / 32; i++) {
             const random = Math.random();
             const offset = random * this.groundMaxSize;
             const g = new Ground({
@@ -64,10 +67,15 @@ export class Main extends Scene {
             });
             this.currentHeightTop = random * this.groundMaxSize;
             this.groundTop.add(g);
+            this.newestTopGround = g;
         }
     }
 
     public update(): void {
+        console.log('top');
+        console.log(this.groundTop.getLength());
+        console.log('bottom');
+        console.log(this.groundBottom.getLength());
         this.copter.update();
         if (this.copter.isCrashed) {
             this.scene.start('MenuScene', { reason: 'fail' });
@@ -99,20 +107,9 @@ export class Main extends Scene {
         // remove old ground and generate new one
         for (const go of this.groundTop.getChildren()) {
             const g = go as Ground;
-            console.log(g);
             if (g.x < -32) {
                 this.groundTop.remove(g);
                 g.destroy();
-                const random = Math.random();
-                const offset = random * this.groundMaxSize;
-                const ng = new Ground({
-                    scene: this,
-                    x: this.sys.canvas.width + 32,
-                    y: -320 + offset + 32,
-                    texture: 'ground',
-                });
-                this.currentHeightTop = random * this.groundMaxSize;
-                this.groundTop.add(ng);
             }
         }
         for (const go of this.groundBottom.getChildren()) {
@@ -120,17 +117,35 @@ export class Main extends Scene {
             if (g.x < -32) {
                 this.groundBottom.remove(g);
                 g.destroy();
-                const random = Math.random();
-                const offset = random * this.groundMaxSize;
-                const ng = new Ground({
-                    scene: this,
-                    x: this.sys.canvas.width + 32,
-                    y: this.sys.game.canvas.height - 32 - offset - 32,
-                    texture: 'ground',
-                });
-                this.currentHeightBottom = random * this.groundMaxSize;
-                this.groundBottom.add(ng);
             }
+        }
+
+        // create new grounds
+        if (this.newestTopGround.x < this.sys.canvas.width + 16) {
+            const random = Math.random();
+            const offset = random * this.groundMaxSize;
+            const ng = new Ground({
+                scene: this,
+                x: this.newestTopGround.x + 28,
+                y: -320 + offset + 32,
+                texture: 'ground',
+            });
+            this.currentHeightTop = random * this.groundMaxSize;
+            this.groundTop.add(ng);
+            this.newestTopGround = ng;
+        }
+        if (this.newestBottomGround.x < this.sys.canvas.width + 16) {
+            const random = Math.random();
+            const offset = random * this.groundMaxSize;
+            const ng = new Ground({
+                scene: this,
+                x: this.newestBottomGround.x + 28,
+                y: this.sys.game.canvas.height - 32 - offset - 32,
+                texture: 'ground',
+            });
+            this.currentHeightBottom = random * this.groundMaxSize;
+            this.groundBottom.add(ng);
+            this.newestBottomGround = ng;
         }
     }
 }
