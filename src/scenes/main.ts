@@ -3,7 +3,7 @@ import { Copter } from '../objects/copter';
 import { Ground } from '../objects/ground';
 
 export class Main extends Scene {
-    private readonly groundMaxSize = 100;
+    private readonly groundMaxSize = 75;
 
     private readonly groundTop: Phaser.GameObjects.Group;
     private readonly groundBottom: Phaser.GameObjects.Group;
@@ -44,7 +44,7 @@ export class Main extends Scene {
             const g = new Ground({
                 scene: this,
                 x: i * 32,
-                y: this.sys.game.canvas.height - 32 - offset,
+                y: this.sys.game.canvas.height - 32 - offset - 32,
                 texture: 'ground',
             });
             this.currentHeightBottom = random * this.groundMaxSize;
@@ -59,7 +59,7 @@ export class Main extends Scene {
             const g = new Ground({
                 scene: this,
                 x: i * 32,
-                y: -320 + offset,
+                y: -320 + offset + 32,
                 texture: 'ground',
             });
             this.currentHeightTop = random * this.groundMaxSize;
@@ -108,7 +108,7 @@ export class Main extends Scene {
                 const ng = new Ground({
                     scene: this,
                     x: this.sys.canvas.width + 32,
-                    y: -320 + offset,
+                    y: -320 + offset + 32,
                     texture: 'ground',
                 });
                 this.currentHeightTop = random * this.groundMaxSize;
@@ -125,7 +125,7 @@ export class Main extends Scene {
                 const ng = new Ground({
                     scene: this,
                     x: this.sys.canvas.width + 32,
-                    y: this.sys.game.canvas.height - 32 - offset,
+                    y: this.sys.game.canvas.height - 32 - offset - 32,
                     texture: 'ground',
                 });
                 this.currentHeightBottom = random * this.groundMaxSize;
