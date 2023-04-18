@@ -78,7 +78,7 @@ export class GameScene extends Scene {
         console.log(this.groundBottom.getLength());
         this.copter.update();
         if (this.copter.isCrashed) {
-            this.scene.start('GameScene', { reason: 'fail' });
+            this.scene.start('MenuScene', { reason: 'fail' });
         }
 
         if (!this.copter.isCrashed) {
