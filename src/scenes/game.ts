@@ -16,7 +16,7 @@ export class GameScene extends Scene {
     private newestBottomGround!: Ground;
 
     constructor() {
-        super({ key: 'MainScene' });
+        super({ key: 'GameScene' });
 
         this.currentHeightTop = 1;
         this.currentHeightBottom = 1;
