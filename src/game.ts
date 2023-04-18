@@ -1,7 +1,7 @@
 import { Types } from 'phaser';
-import { Main } from './scenes/main';
 import {MenuScene} from "./scenes/menu";
 import {BootScene} from "./scenes/boot";
+import {GameScene} from "./scenes/game";
 
 const parent: string = 'game';
 
@@ -24,7 +24,7 @@ export class Game extends Phaser.Game {
                 min: 40,
                 target: 40,
             },
-            scene: [BootScene, MenuScene, Main],
+            scene: [BootScene, MenuScene, GameScene],
             render: {
                 pixelArt: true,
             },

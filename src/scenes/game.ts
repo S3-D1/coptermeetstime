@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 import { Copter } from '../objects/copter';
 import { Ground } from '../objects/ground';
 
-export class Main extends Scene {
+export class GameScene extends Scene {
     private readonly groundMaxSize = 75;
 
     private readonly groundTop: Phaser.GameObjects.Group;
@@ -78,7 +78,7 @@ export class Main extends Scene {
         console.log(this.groundBottom.getLength());
         this.copter.update();
         if (this.copter.isCrashed) {
-            this.scene.start('MenuScene', { reason: 'fail' });
+            this.scene.start('GameScene', { reason: 'fail' });
         }
 
         if (!this.copter.isCrashed) {
