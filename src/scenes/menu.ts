@@ -1,8 +1,9 @@
+import { Scene } from 'phaser';
 export interface InitArgs {
     reason: string
 }
 
-export class MenuScene extends Phaser.Scene {
+export class MenuScene extends Scene {
     private startKey!: Phaser.Input.Keyboard.Key;
 
     constructor() {
