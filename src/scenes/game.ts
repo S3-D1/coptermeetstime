@@ -15,6 +15,12 @@ export class GameScene extends Scene {
     private newestTopGround!: Ground;
     private newestBottomGround!: Ground;
 
+    private score : number = 0;
+    private scoreText!: Phaser.GameObjects.Text;
+
+    private totalTime: number = 999;
+    private timeLeftText!: Phaser.GameObjects.Text;
+
     constructor() {
         super({ key: 'GameScene' });
 
@@ -30,12 +36,14 @@ export class GameScene extends Scene {
             frameWidth: 16,
             frameHeight: 16,
         });
+        this.scoreText = this.add.text(16, 120, 'score: 0');
+        this.timeLeftText = this.add.text(16, 140, 'time left: 0');
     }
 
     public create(): void {
         this.copter = new Copter({
             scene: this,
-            x: 50,
+            x: 150,
             y: 100,
             texture: 'copter',
         });
@@ -69,6 +77,8 @@ export class GameScene extends Scene {
             this.groundTop.add(g);
             this.newestTopGround = g;
         }
+        this.score = 0;
+        this.updateText();
     }
 
     public update(): void {
@@ -78,7 +88,7 @@ export class GameScene extends Scene {
         console.log(this.groundBottom.getLength());
         this.copter.update();
         if (this.copter.isCrashed) {
-            this.scene.start('MenuScene', { reason: 'fail' });
+            this.scene.start('MenuScene', { reason: 'fail', score: this.score });
         }
 
         if (!this.copter.isCrashed) {
@@ -147,5 +157,13 @@ export class GameScene extends Scene {
             this.groundBottom.add(ng);
             this.newestBottomGround = ng;
         }
+    }
+
+    public updateText(): void {
+
+        this.scoreText.setText("score: " + this.score)
+        this.timeLeftText.setText("time left: " + (this.totalTime - this.score))
+        this.score++
+        this.time.delayedCall(1000, this.updateText, [], this);
     }
 }

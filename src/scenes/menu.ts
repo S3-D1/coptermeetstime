@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 export interface InitArgs {
-    reason: string
+    reason: string;
+    score: number;
 }
 
 export class MenuScene extends Scene {
@@ -19,10 +20,14 @@ export class MenuScene extends Scene {
         this.startKey.isDown = false;
         switch (data.reason) {
             case 'start':
-                this.add.text(300,100, "Welcome to Copter meets Time!")
+                this.add.text(300,100, "Welcome to Copter meets Time!");
                 break;
             case 'fail':
-                this.add.text(300,100, "NOOB! Try Again: Copter meets Time")
+                if(data.score > 30){
+                    this.add.text(300,100, "Well Done! Try Again: Copter meets Time");
+                } else {
+                    this.add.text(300,100, "NOOB! Try Again: Copter meets Time");
+                }
                 break;
             default:
                 break;
