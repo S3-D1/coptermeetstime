@@ -1,7 +1,7 @@
 import { Types } from 'phaser';
-import {MenuScene} from "./scenes/menu";
-import {BootScene} from "./scenes/boot";
-import {GameScene} from "./scenes/game";
+import { MenuScene } from './scenes/menu';
+import { BootScene } from './scenes/boot';
+import { GameScene } from './scenes/game';
 
 const parent: string = 'game';
 

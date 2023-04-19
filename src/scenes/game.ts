@@ -15,10 +15,10 @@ export class GameScene extends Scene {
     private newestTopGround!: Ground;
     private newestBottomGround!: Ground;
 
-    private score : number = 0;
+    private score: number = 0;
     private scoreText!: Phaser.GameObjects.Text;
 
-    private totalTime: number = 999;
+    private readonly totalTime: number = 999;
     private timeLeftText!: Phaser.GameObjects.Text;
 
     constructor() {
@@ -88,7 +88,10 @@ export class GameScene extends Scene {
         console.log(this.groundBottom.getLength());
         this.copter.update();
         if (this.copter.isCrashed) {
-            this.scene.start('MenuScene', { reason: 'fail', score: this.score });
+            this.scene.start('MenuScene', {
+                reason: 'fail',
+                score: this.score,
+            });
         }
 
         if (!this.copter.isCrashed) {
@@ -160,10 +163,11 @@ export class GameScene extends Scene {
     }
 
     public updateText(): void {
-
-        this.scoreText.setText("score: " + this.score)
-        this.timeLeftText.setText("time left: " + (this.totalTime - this.score))
-        this.score++
+        this.scoreText.setText('score: ' + this.score);
+        this.timeLeftText.setText(
+            'time left: ' + (this.totalTime - this.score)
+        );
+        this.score++;
         this.time.delayedCall(1000, this.updateText, [], this);
     }
 }
