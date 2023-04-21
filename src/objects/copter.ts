@@ -25,15 +25,15 @@ export class Copter extends Phaser.GameObjects.Image {
         // physics
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
-        this.body.setGravityY(1000);
         this.body.setSize(17, 12);
 
+        this.scene.add.existing(this);
+
+        this.body.setGravityY(1000);
         // input
         this.jumpKey = this.scene.input.keyboard!.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
-
-        this.scene.add.existing(this);
     }
 
     public update() {
@@ -41,5 +41,13 @@ export class Copter extends Phaser.GameObjects.Image {
         if (this.jumpKey.isDown) {
             this.body.setVelocityY(-200);
         }
+    }
+
+    public gameOver(): void {
+        this.isCrashed = true;
+        this.jumpKey.enabled = false;
+        this.jumpKey.isDown = false;
+        this.body.setGravityY(0);
+        this.body.setVelocityY(0);
     }
 }
