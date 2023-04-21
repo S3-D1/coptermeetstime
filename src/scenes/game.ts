@@ -114,7 +114,7 @@ export class GameScene extends Scene {
         this.movables.setVelocityX(this.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
             switch (object2.constructor.name) {
-                case 'Ground':
+                case Ground.name:
                     this.setGameOver();
             }
         });
