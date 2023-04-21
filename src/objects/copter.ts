@@ -45,8 +45,8 @@ export class Copter extends Phaser.GameObjects.Image {
 
     public gameOver(): void {
         this.isCrashed = true;
-        this.jumpKey.enabled = false;
         this.jumpKey.isDown = false;
+        this.jumpKey.enabled = false;
         this.body.setGravityY(0);
         this.body.setVelocityY(0);
     }

@@ -14,7 +14,7 @@ export class GameScene extends Scene {
     private score: number = 0;
     private scoreText!: Phaser.GameObjects.Text;
 
-    private readonly totalTime: number = 999;
+    private readonly totalTime: number = 45;
     private timeLeftText!: Phaser.GameObjects.Text;
 
     private gameVelocity!: number;
@@ -84,48 +84,40 @@ export class GameScene extends Scene {
         if (this.gameOver) {
             this.add.text(360, 240, 'Game Over!');
             this.time.delayedCall(2000, this.restart, [], this);
-        }
-
-        if (!this.copter.isCrashed) {
-            // collision top
-            this.physics.overlap(
-                this.copter,
-                this.movables,
-                (object1, object2) => {
-                    switch (object2.constructor.name) {
-                        case 'Ground':
-                            this.setGameOver();
+        } else {
+            // remove old ground and generate new one
+            for (const go of this.movables.getChildren()) {
+                const g = go as Ground;
+                if (g.x < -32) {
+                    const random = Math.random();
+                    const offset = random * this.groundMaxSize;
+                    let ngy: number;
+                    if (g.y < 0) {
+                        this.currentHeightTop = random * this.groundMaxSize;
+                        ngy = -320 + offset + 32;
+                    } else {
+                        this.currentHeightBottom = random * this.groundMaxSize;
+                        ngy = this.sys.game.canvas.height - 32 - offset - 32;
                     }
+                    const ng = new Ground({
+                        scene: this,
+                        x: g.x + 28 + this.sys.game.canvas.width + 32,
+                        y: ngy,
+                        texture: 'ground',
+                    });
+                    this.movables.remove(g);
+                    g.destroy();
+                    this.movables.add(ng);
                 }
-            );
-        }
-
-        // remove old ground and generate new one
-        for (const go of this.movables.getChildren()) {
-            const g = go as Ground;
-            if (g.x < -32) {
-                const random = Math.random();
-                const offset = random * this.groundMaxSize;
-                let ngy: number;
-                if (g.y < 0) {
-                    this.currentHeightTop = random * this.groundMaxSize;
-                    ngy = -320 + offset + 32;
-                } else {
-                    this.currentHeightBottom = random * this.groundMaxSize;
-                    ngy = this.sys.game.canvas.height - 32 - offset - 32;
-                }
-                const ng = new Ground({
-                    scene: this,
-                    x: g.x + 28 + this.sys.game.canvas.width + 32,
-                    y: ngy,
-                    texture: 'ground',
-                });
-                this.movables.remove(g);
-                g.destroy();
-                this.movables.add(ng);
             }
         }
         this.movables.setVelocityX(this.gameVelocity);
+        this.physics.overlap(this.copter, this.movables, (object1, object2) => {
+            switch (object2.constructor.name) {
+                case 'Ground':
+                    this.setGameOver();
+            }
+        });
     }
 
     private setGameOver() {
