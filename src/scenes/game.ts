@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { Copter } from '../objects/copter';
 import { Ground } from '../objects/ground';
+import { Clock } from '../objects/clock';
 
 export class GameScene extends Scene {
     private readonly groundMaxSize = 75;
@@ -8,13 +9,14 @@ export class GameScene extends Scene {
     private movables!: Phaser.Physics.Arcade.Group;
 
     private copter!: Copter;
+    private clock!: Clock;
     private currentHeightTop: number;
     private currentHeightBottom: number;
 
     private score: number = 0;
     private scoreText!: Phaser.GameObjects.Text;
 
-    private readonly totalTime: number = 45;
+    private timeLeft: number = 10;
     private timeLeftText!: Phaser.GameObjects.Text;
 
     private gameVelocity!: number;
@@ -29,6 +31,7 @@ export class GameScene extends Scene {
 
     public preload(): void {
         this.load.image('ground', 'assets/ground-long.png');
+        this.load.image('clock', 'assets/clock.png');
         this.load.spritesheet('copter', 'assets/copter.png', {
             frameWidth: 16,
             frameHeight: 16,
@@ -46,6 +49,7 @@ export class GameScene extends Scene {
         });
         this.movables = this.physics.add.group();
 
+        // generate ground
         for (let i = 0; i < (this.sys.game.canvas.width + 92) / 32; i++) {
             // generate bottom
             let random = Math.random();
@@ -72,7 +76,16 @@ export class GameScene extends Scene {
             this.movables.add(g);
         }
 
+        // generate clock
+        this.clock = new Clock({
+            scene: this,
+            x: this.sys.game.canvas.width + 50,
+            y: this.sys.game.canvas.height / 2,
+            texture: 'clock',
+        });
+
         this.gameVelocity = -200;
+        this.clock.body.setVelocityX(this.gameVelocity);
         this.movables.setVelocityX(this.gameVelocity);
         this.score = 0;
         this.gameOver = false;
@@ -111,6 +124,17 @@ export class GameScene extends Scene {
                 }
             }
         }
+        if (this.clock.x < -32) {
+            this.clock.destroy();
+
+            this.clock = new Clock({
+                scene: this,
+                x: this.sys.game.canvas.width + 50,
+                y: this.sys.game.canvas.height / 2,
+                texture: 'clock',
+            });
+            this.clock.body.setVelocityX(this.gameVelocity);
+        }
         this.movables.setVelocityX(this.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
             switch (object2.constructor.name) {
@@ -118,21 +142,35 @@ export class GameScene extends Scene {
                     this.setGameOver();
             }
         });
+        this.physics.overlap(this.copter, this.clock, () => {
+            this.timeLeft += 10;
+            this.timeLeftText.setText('time left: ' + this.timeLeft);
+            this.clock.destroy();
+
+            this.clock = new Clock({
+                scene: this,
+                x: this.sys.game.canvas.width + 50,
+                y: this.sys.game.canvas.height / 2,
+                texture: 'clock',
+            });
+            this.clock.body.setVelocityX(this.gameVelocity);
+        });
     }
 
     private setGameOver() {
         this.gameOver = true;
         this.copter.gameOver();
         this.gameVelocity = 0;
+        this.clock.body.setVelocityX(0);
     }
 
     public updateText(): void {
         if (!this.gameOver) {
             this.score++;
             this.scoreText.setText('score: ' + this.score);
-            const timeLeft = this.totalTime - this.score;
-            this.timeLeftText.setText('time left: ' + timeLeft);
-            if (timeLeft === 0) {
+            this.timeLeft = this.timeLeft - 1;
+            this.timeLeftText.setText('time left: ' + this.timeLeft);
+            if (this.timeLeft === 0) {
                 this.setGameOver();
             } else {
                 this.time.delayedCall(1000, this.updateText, [], this);
@@ -145,5 +183,6 @@ export class GameScene extends Scene {
             reason: 'fail',
             score: this.score,
         });
+        this.timeLeft = 10;
     }
 }
