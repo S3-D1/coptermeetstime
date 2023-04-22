@@ -34,6 +34,8 @@ export class Copter extends Phaser.GameObjects.Image {
         this.jumpKey = this.scene.input.keyboard!.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
+        this.jumpKey.isDown = false;
+        this.scene.input.activePointer.isDown = false;
     }
 
     public update() {
@@ -46,6 +48,7 @@ export class Copter extends Phaser.GameObjects.Image {
     public gameOver(): void {
         this.isCrashed = true;
         this.jumpKey.isDown = false;
+        this.scene.input.activePointer.isDown = false;
         this.jumpKey.enabled = false;
         this.body.setGravityY(0);
         this.body.setVelocityY(0);

@@ -47,7 +47,6 @@ export class MenuScene extends Scene {
     update() {
         if (this.startKey.isDown || this.input.activePointer.isDown) {
             this.scene.start('GameScene');
-            this.input.activePointer.isDown = false;
         }
     }
 }
