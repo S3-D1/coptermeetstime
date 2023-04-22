@@ -82,6 +82,7 @@ export class GameScene extends Scene {
         this.gameVelocity = -200;
         this.movables.setVelocityX(this.gameVelocity);
         this.score = 0;
+        this.timeLeft = 10;
         this.gameOver = false;
         this.updateText();
     }
@@ -192,6 +193,5 @@ export class GameScene extends Scene {
         this.scene.start('ScoreBoardScene', {
             score: this.score,
         });
-        this.timeLeft = 10;
     }
 }
