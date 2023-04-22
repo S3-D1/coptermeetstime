@@ -9,7 +9,6 @@ export class GameScene extends Scene {
     private movables!: Phaser.Physics.Arcade.Group;
 
     private copter!: Copter;
-    private clock!: Clock;
     private currentHeightTop: number;
     private currentHeightBottom: number;
 
@@ -21,6 +20,8 @@ export class GameScene extends Scene {
 
     private gameVelocity!: number;
     private gameOver: boolean = false;
+
+    private readonly clockTime = 10;
 
     constructor() {
         super({ key: 'GameScene' });
@@ -76,20 +77,30 @@ export class GameScene extends Scene {
             this.movables.add(g);
         }
 
+        this.createClock();
+
+        this.gameVelocity = -200;
+        this.movables.setVelocityX(this.gameVelocity);
+        this.score = 0;
+        this.gameOver = false;
+        this.updateText();
+    }
+
+    private createClock() {
         // generate clock
-        this.clock = new Clock({
+        const c = new Clock({
             scene: this,
             x: this.sys.game.canvas.width + 50,
             y: this.sys.game.canvas.height / 2,
             texture: 'clock',
         });
-
-        this.gameVelocity = -200;
-        this.clock.body.setVelocityX(this.gameVelocity);
-        this.movables.setVelocityX(this.gameVelocity);
-        this.score = 0;
-        this.gameOver = false;
-        this.updateText();
+        this.movables.add(c);
+        this.time.delayedCall(
+            0.8 * 1000 * this.clockTime,
+            this.createClock,
+            [],
+            this
+        );
     }
 
     public update(): void {
@@ -100,60 +111,57 @@ export class GameScene extends Scene {
         } else {
             // remove old ground and generate new one
             for (const go of this.movables.getChildren()) {
-                const g = go as Ground;
-                if (g.x < -32) {
-                    const random = Math.random();
-                    const offset = random * this.groundMaxSize;
-                    let ngy: number;
-                    if (g.y < 0) {
-                        this.currentHeightTop = random * this.groundMaxSize;
-                        ngy = -320 + offset + 32;
-                    } else {
-                        this.currentHeightBottom = random * this.groundMaxSize;
-                        ngy = this.sys.game.canvas.height - 32 - offset - 32;
-                    }
-                    const ng = new Ground({
-                        scene: this,
-                        x: g.x + 28 + this.sys.game.canvas.width + 32,
-                        y: ngy,
-                        texture: 'ground',
-                    });
-                    this.movables.remove(g);
-                    g.destroy();
-                    this.movables.add(ng);
+                switch (go.constructor.name) {
+                    case Ground.name:
+                        const g = go as Ground;
+                        if (g.x < -32) {
+                            const random = Math.random();
+                            const offset = random * this.groundMaxSize;
+                            let ngy: number;
+                            if (g.y < 0) {
+                                this.currentHeightTop =
+                                    random * this.groundMaxSize;
+                                ngy = -320 + offset + 32;
+                            } else {
+                                this.currentHeightBottom =
+                                    random * this.groundMaxSize;
+                                ngy =
+                                    this.sys.game.canvas.height -
+                                    32 -
+                                    offset -
+                                    32;
+                            }
+                            const ng = new Ground({
+                                scene: this,
+                                x: g.x + 28 + this.sys.game.canvas.width + 32,
+                                y: ngy,
+                                texture: 'ground',
+                            });
+                            this.movables.remove(g);
+                            g.destroy();
+                            this.movables.add(ng);
+                        }
+                        break;
+                    case Clock.name:
+                        const c = go as Clock;
+                        if (c.x < -1 * c.width) {
+                            this.movables.remove(c);
+                            c.destroy();
+                        }
                 }
             }
-        }
-        if (this.clock.x < -32) {
-            this.clock.destroy();
-
-            this.clock = new Clock({
-                scene: this,
-                x: this.sys.game.canvas.width + 50,
-                y: this.sys.game.canvas.height / 2,
-                texture: 'clock',
-            });
-            this.clock.body.setVelocityX(this.gameVelocity);
         }
         this.movables.setVelocityX(this.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
             switch (object2.constructor.name) {
                 case Ground.name:
                     this.setGameOver();
+                    break;
+                case Clock.name:
+                    this.timeLeft += this.clockTime;
+                    this.timeLeftText.setText('time left: ' + this.timeLeft);
+                    object2.destroy();
             }
-        });
-        this.physics.overlap(this.copter, this.clock, () => {
-            this.timeLeft += 10;
-            this.timeLeftText.setText('time left: ' + this.timeLeft);
-            this.clock.destroy();
-
-            this.clock = new Clock({
-                scene: this,
-                x: this.sys.game.canvas.width + 50,
-                y: this.sys.game.canvas.height / 2,
-                texture: 'clock',
-            });
-            this.clock.body.setVelocityX(this.gameVelocity);
         });
     }
 
@@ -161,14 +169,13 @@ export class GameScene extends Scene {
         this.gameOver = true;
         this.copter.gameOver();
         this.gameVelocity = 0;
-        this.clock.body.setVelocityX(0);
     }
 
     public updateText(): void {
         if (!this.gameOver) {
             this.score++;
             this.scoreText.setText('score: ' + this.score);
-            this.timeLeft = this.timeLeft - 1;
+            this.timeLeft--;
             this.timeLeftText.setText('time left: ' + this.timeLeft);
             if (this.timeLeft === 0) {
                 this.setGameOver();
