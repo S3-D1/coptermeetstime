@@ -61,7 +61,7 @@ export class GameScene extends Scene {
                 y: this.sys.game.canvas.height - 32 - offset - 32,
                 texture: 'ground',
             });
-            this.currentHeightBottom = random * this.groundMaxSize;
+            this.currentHeightBottom = g.y;
             this.movables.add(g);
 
             // generate top
@@ -73,7 +73,7 @@ export class GameScene extends Scene {
                 y: -320 + offset + 32,
                 texture: 'ground',
             });
-            this.currentHeightTop = random * this.groundMaxSize;
+            this.currentHeightTop = g.y;
             this.movables.add(g);
         }
 
@@ -87,11 +87,14 @@ export class GameScene extends Scene {
     }
 
     private createClock() {
+        const range = this.currentHeightBottom - (this.currentHeightTop + Ground.defaultHeight) - Clock.defaultHeight;
+        const random = Math.random();
+        const y = this.currentHeightTop + Ground.defaultHeight + (range * random);
         // generate clock
         const c = new Clock({
             scene: this,
             x: this.sys.game.canvas.width + 50,
-            y: this.sys.game.canvas.height / 2,
+            y,
             texture: 'clock',
         });
         this.movables.add(c);

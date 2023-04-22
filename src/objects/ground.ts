@@ -4,6 +4,8 @@ import Body = Phaser.Physics.Arcade.Body;
 export class Ground extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
 
+    public static readonly defaultHeight = 320;
+
     constructor(aParams: IImageConstructor) {
         super(
             aParams.scene,
@@ -21,7 +23,7 @@ export class Ground extends Phaser.GameObjects.Image {
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
         this.body.allowGravity = false;
-        this.body.setSize(32, 320);
+        this.body.setSize(32, Ground.defaultHeight);
         this.scene.add.existing(this);
     }
 }
