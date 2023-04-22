@@ -88,9 +88,10 @@ export class GameScene extends Scene {
     }
 
     private createClock() {
-        const range = this.currentHeightBottom - (this.currentHeightTop + Ground.defaultHeight) - Clock.defaultHeight;
+        const padding = 10;
+        const range = this.currentHeightBottom - padding - (this.currentHeightTop + Ground.defaultHeight + padding) - Clock.defaultHeight;
         const random = Math.random();
-        const y = this.currentHeightTop + Ground.defaultHeight + (range * random);
+        const y = this.currentHeightTop + Ground.defaultHeight + padding + (range * random);
         // generate clock
         const c = new Clock({
             scene: this,
