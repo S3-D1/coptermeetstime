@@ -189,8 +189,7 @@ export class GameScene extends Scene {
     }
 
     public restart(): void {
-        this.scene.start('MenuScene', {
-            reason: 'fail',
+        this.scene.start('ScoreBoardScene', {
             score: this.score,
         });
         this.timeLeft = 10;

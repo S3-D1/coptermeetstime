@@ -2,10 +2,12 @@ import { Types } from 'phaser';
 import { MenuScene } from './scenes/menu';
 import { BootScene } from './scenes/boot';
 import { GameScene } from './scenes/game';
+import {ScoreBoardScene} from "./scenes/score";
 
 const parent: string = 'game';
 
-export class Game extends Phaser.Game {
+export class CopterMeetsTime extends Phaser.Game {
+    public readonly scores : number[] = [];
     constructor() {
         const config: Types.Core.GameConfig = {
             title: 'Copter meets Time',
@@ -24,7 +26,7 @@ export class Game extends Phaser.Game {
                 min: 40,
                 target: 40,
             },
-            scene: [BootScene, MenuScene, GameScene],
+            scene: [BootScene, MenuScene, GameScene, ScoreBoardScene],
             render: {
                 pixelArt: true,
             },
