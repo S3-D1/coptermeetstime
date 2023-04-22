@@ -41,11 +41,11 @@ export class MenuScene extends Scene {
     }
 
     create(): void {
-        this.add.text(300, 200, 'Press [SPACE] to start');
+        this.add.text(300, 200, 'Press [SPACE], Click or Touch to start');
     }
 
     update() {
-        if (this.startKey.isDown) {
+        if (this.startKey.isDown || this.input.activePointer.isDown) {
             this.scene.start('GameScene');
         }
     }
