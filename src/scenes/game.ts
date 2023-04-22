@@ -55,25 +55,26 @@ export class GameScene extends Scene {
             // generate bottom
             let random = Math.random();
             let offset = random * this.groundMaxSize;
+            this.currentHeightBottom =
+                this.sys.game.canvas.height - 32 - offset - 32;
             let g = new Ground({
                 scene: this,
                 x: i * 32,
-                y: this.sys.game.canvas.height - 32 - offset - 32,
+                y: this.currentHeightBottom,
                 texture: 'ground',
             });
-            this.currentHeightBottom = g.y;
             this.movables.add(g);
 
             // generate top
             random = Math.random();
             offset = random * this.groundMaxSize;
+            this.currentHeightTop = -320 + offset + 32;
             g = new Ground({
                 scene: this,
                 x: i * 32,
-                y: -320 + offset + 32,
+                y: this.currentHeightTop,
                 texture: 'ground',
             });
-            this.currentHeightTop = g.y;
             this.movables.add(g);
         }
 
@@ -88,10 +89,13 @@ export class GameScene extends Scene {
     }
 
     private createClock() {
+        const upperBound = this.currentHeightTop + Ground.defaultHeight;
+        const lowerBound = this.currentHeightBottom;
         const padding = 10;
-        const range = this.currentHeightBottom - padding - (this.currentHeightTop + Ground.defaultHeight + padding) - Clock.defaultHeight;
+        const range =
+            lowerBound - padding - (upperBound + padding) - Clock.defaultHeight;
         const random = Math.random();
-        const y = this.currentHeightTop + Ground.defaultHeight + padding + (range * random);
+        const y = upperBound + padding + range * random;
         // generate clock
         const c = new Clock({
             scene: this,
@@ -138,7 +142,7 @@ export class GameScene extends Scene {
                             }
                             const ng = new Ground({
                                 scene: this,
-                                x: g.x + 28 + this.sys.game.canvas.width + 32,
+                                x: g.x + 32 + this.sys.game.canvas.width + 32,
                                 y: ngy,
                                 texture: 'ground',
                             });
