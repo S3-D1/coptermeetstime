@@ -19,13 +19,13 @@ export class Copter extends Phaser.GameObjects.Image {
         this.isCrashed = false;
 
         // image
-        this.setScale(3);
+        this.setScale(1);
         this.setOrigin(0, 0);
 
         // physics
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
-        this.body.setSize(15, 11);
+        this.body.setSize(42, 26);
 
         this.scene.add.existing(this);
 

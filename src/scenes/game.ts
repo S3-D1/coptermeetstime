@@ -34,8 +34,8 @@ export class GameScene extends Scene {
         this.load.image('ground', 'assets/ground-long.png');
         this.load.image('clock', 'assets/clock.png');
         this.load.spritesheet('copter', 'assets/copter.png', {
-            frameWidth: 16,
-            frameHeight: 16,
+            frameWidth: 42,
+            frameHeight: 26,
         });
         this.scoreText = this.add.text(16, 120, 'score: 0');
         this.timeLeftText = this.add.text(16, 140, 'time left: 0');
@@ -45,7 +45,7 @@ export class GameScene extends Scene {
         this.copter = new Copter({
             scene: this,
             x: 150,
-            y: 100,
+            y: 150,
             texture: 'copter',
         });
         this.movables = this.physics.add.group();
