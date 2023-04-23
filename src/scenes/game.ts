@@ -76,7 +76,7 @@ export class GameScene extends Scene {
             y,
             texture: 'clock',
         });
-        this.time.delayedCall(300, this.resetClockSpwan, [], this);
+        this.time.delayedCall(300, this.resetClockSpawn, [], this);
         this.time.delayedCall(
             0.8 * 1000 * this.clockTime,
             this.createClock,
@@ -188,7 +188,7 @@ export class GameScene extends Scene {
         });
     }
 
-    public resetClockSpwan(): void {
+    public resetClockSpawn(): void {
         this.newClockSpawn = Number.NEGATIVE_INFINITY;
     }
 }
