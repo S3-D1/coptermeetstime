@@ -1,5 +1,4 @@
 import Body = Phaser.Physics.Arcade.Body;
-import { IImageConstructor } from '../interfaces/image.interface';
 
 interface ConstructorArgs {
     scene: Phaser.Scene;
