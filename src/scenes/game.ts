@@ -132,8 +132,14 @@ export class GameScene extends Scene {
                             let ngy: number;
                             if (g.y < 0) {
                                 ngy = -320 + offset + 32;
-                                if ( ngy + Ground.defaultHeight > this.newClockSpawn) {
-                                    ngy = this.newClockSpawn - 10 - Ground.defaultHeight;
+                                if (
+                                    ngy + Ground.defaultHeight >
+                                    this.newClockSpawn
+                                ) {
+                                    ngy =
+                                        this.newClockSpawn -
+                                        10 -
+                                        Ground.defaultHeight;
                                 }
                                 this.currentHeightTop = ngy;
                             } else {
@@ -142,11 +148,10 @@ export class GameScene extends Scene {
                                     32 -
                                     offset -
                                     32;
-                                if ( ngy < this.newClockSpawn) {
+                                if (ngy < this.newClockSpawn) {
                                     ngy = this.newClockSpawn - 10;
                                 }
                                 this.currentHeightBottom = ngy;
-
                             }
                             const ng = new Ground({
                                 scene: this,

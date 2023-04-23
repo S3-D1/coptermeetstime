@@ -40,7 +40,10 @@ export class Copter extends Phaser.GameObjects.Image {
 
     public update() {
         super.update();
-        if (!this.isCrashed && (this.jumpKey.isDown || this.scene.input.activePointer.isDown)) {
+        if (
+            !this.isCrashed &&
+            (this.jumpKey.isDown || this.scene.input.activePointer.isDown)
+        ) {
             this.body.setVelocityY(-200);
         }
     }
