@@ -19,7 +19,8 @@ export class GroundManager {
             // generate bottom
             let random = Math.random();
             let height = random * this.groundMaxSize;
-            this.currentHeightBottom = -32 - height - this.groundMinSize;
+            this.currentHeightBottom =
+                this.scene.sys.game.canvas.height - height - this.groundMinSize;
             let g = new Ground({
                 scene: this.scene,
                 x: i * 32,

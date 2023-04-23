@@ -19,13 +19,7 @@ export class Ground extends Phaser.GameObjects.Image {
     public static readonly defaultHeight: number = 320;
 
     constructor(args: ConstructorArgs) {
-        const y =
-            args.y ||
-            Ground.calcY(
-                args.orientation,
-                args.height,
-                args.scene.sys.game.canvas.height
-            );
+        const y = args.y || Ground.calcY(args.orientation, args.height);
         super(args.scene, args.x, y, 'ground');
 
         // physics
@@ -34,18 +28,18 @@ export class Ground extends Phaser.GameObjects.Image {
         this.body.allowGravity = false;
         this.body.setSize(32, Ground.defaultHeight);
         this.scene.add.existing(this);
+        this.setOrigin(0, 0);
     }
 
     private static calcY(
         orientation: GroundOrientation,
-        height: number,
-        canvasHeight: number
+        height: number
     ): number {
         if (orientation === GroundOrientation.TOP) {
-            return height - Ground.defaultHeight / 2;
+            return height - Ground.defaultHeight;
         }
         if (orientation === GroundOrientation.BOTTOM) {
-            return canvasHeight - height;
+            return height;
         }
         return 0;
     }
