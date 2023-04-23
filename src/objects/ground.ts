@@ -4,8 +4,7 @@ interface ConstructorArgs {
     scene: Phaser.Scene;
     x: number;
     orientation: GroundOrientation;
-    height: number;
-    y?: number;
+    innerBound: number;
 }
 
 export enum GroundOrientation {
@@ -19,7 +18,7 @@ export class Ground extends Phaser.GameObjects.Image {
     public static readonly defaultHeight: number = 320;
 
     constructor(args: ConstructorArgs) {
-        const y = args.y || Ground.calcY(args.orientation, args.height);
+        const y = Ground.calcY(args.orientation, args.innerBound);
         super(args.scene, args.x, y, 'ground');
 
         // physics
@@ -33,13 +32,13 @@ export class Ground extends Phaser.GameObjects.Image {
 
     private static calcY(
         orientation: GroundOrientation,
-        height: number
+        innerBound: number
     ): number {
         if (orientation === GroundOrientation.TOP) {
-            return height - Ground.defaultHeight;
+            return innerBound - Ground.defaultHeight;
         }
         if (orientation === GroundOrientation.BOTTOM) {
-            return height;
+            return innerBound;
         }
         return 0;
     }

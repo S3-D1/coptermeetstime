@@ -25,7 +25,7 @@ export class GroundManager {
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.BOTTOM,
-                height: this.currentHeightBottom,
+                innerBound: this.currentHeightBottom,
             });
             movables.add(g);
 
@@ -37,7 +37,7 @@ export class GroundManager {
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.TOP,
-                height: this.currentHeightTop,
+                innerBound: this.currentHeightTop,
             });
             movables.add(g);
         }
@@ -57,33 +57,39 @@ export class GroundManager {
                             g.x + 32 + this.scene.sys.game.canvas.width + 32;
                         const random = Math.random();
                         const offset = random * this.groundMaxSize;
-                        let ngy: number;
+                        let innerBound: number;
+                        let orientation: number;
                         if (g.y < 0) {
-                            ngy = -Ground.defaultHeight + offset + 32;
+                            orientation = GroundOrientation.TOP;
+                            innerBound = offset + this.groundMinSize;
                             if (
                                 newClockSpawn > 0 &&
-                                newClockSpawn < ngy + Ground.defaultHeight
+                                newClockSpawn < innerBound
                             ) {
-                                ngy = newClockSpawn - 10 - Ground.defaultHeight;
+                                innerBound = newClockSpawn - 10;
                             }
-                            this.currentHeightTop = ngy;
+                            this.currentHeightTop = innerBound;
                         } else {
-                            ngy =
+                            orientation = GroundOrientation.BOTTOM;
+                            innerBound =
                                 this.scene.sys.game.canvas.height -
                                 32 -
                                 offset -
-                                32;
-                            if (ngy < newClockSpawn - Clock.defaultHeight) {
-                                ngy = newClockSpawn + Clock.defaultHeight + 10;
+                                this.groundMinSize;
+                            if (
+                                innerBound <
+                                newClockSpawn - Clock.defaultHeight
+                            ) {
+                                innerBound =
+                                    newClockSpawn + Clock.defaultHeight + 10;
                             }
-                            this.currentHeightBottom = ngy;
+                            this.currentHeightBottom = innerBound;
                         }
                         const ng = new Ground({
                             scene: this.scene,
                             x: ngx,
-                            y: ngy,
-                            orientation: GroundOrientation.BOTTOM,
-                            height: 0,
+                            orientation,
+                            innerBound,
                         });
                         g.destroy();
                         movables.add(ng);
