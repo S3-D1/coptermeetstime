@@ -2,8 +2,8 @@ import { Ground, GroundOrientation } from '../objects/ground';
 import { Clock } from '../objects/clock';
 
 export class GroundManager {
-    private readonly groundMaxSize: number = 75;
-    private readonly groundMinSize: number = 32;
+    private readonly groundMaxSize: number = 65;
+    private readonly groundMinSize: number = 20;
     private readonly scene: Phaser.Scene;
 
     public currentHeightTop: number = 0;
@@ -26,7 +26,7 @@ export class GroundManager {
                 orientation: GroundOrientation.BOTTOM,
                 height: height,
             });
-            this.currentHeightBottom = g.y;
+            this.currentHeightBottom = g.getInnerBound();
             movables.add(g);
 
             // generate top
@@ -38,7 +38,7 @@ export class GroundManager {
                 orientation: GroundOrientation.TOP,
                 height: height,
             });
-            this.currentHeightTop = g.y;
+            this.currentHeightTop = g.getInnerBound();
             movables.add(g);
         }
     }
@@ -58,10 +58,8 @@ export class GroundManager {
                         const random = Math.random();
                         const offset = random * this.groundMaxSize;
                         let boundaryHeight: number;
-                        let orientation: number;
                         boundaryHeight = offset + this.groundMinSize;
-                        if (g.y < 0) {
-                            orientation = GroundOrientation.TOP;
+                        if (g.groundOrientation === GroundOrientation.TOP) {
                             if (
                                 newClockSpawn > 0 &&
                                 newClockSpawn < boundaryHeight
@@ -69,7 +67,6 @@ export class GroundManager {
                                 boundaryHeight = newClockSpawn - 10;
                             }
                         } else {
-                            orientation = GroundOrientation.BOTTOM;
                             if (
                                 this.scene.game.canvas.height - boundaryHeight <
                                 newClockSpawn - Clock.defaultHeight
@@ -84,15 +81,15 @@ export class GroundManager {
                         const ng = new Ground({
                             scene: this.scene,
                             x: ngx,
-                            orientation,
+                            orientation: g.groundOrientation,
                             height: boundaryHeight,
                         });
-                        switch (orientation) {
+                        switch (g.groundOrientation) {
                             case GroundOrientation.TOP:
-                                this.currentHeightTop = g.y;
+                                this.currentHeightTop = g.getInnerBound();
                                 break;
                             case GroundOrientation.BOTTOM:
-                                this.currentHeightBottom = g.y;
+                                this.currentHeightBottom = g.getInnerBound();
                                 break;
                         }
 

@@ -14,6 +14,7 @@ export enum GroundOrientation {
 
 export class Ground extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
+    groundOrientation: GroundOrientation;
 
     public static readonly defaultHeight: number = 320;
 
@@ -24,6 +25,7 @@ export class Ground extends Phaser.GameObjects.Image {
             args.scene.game.canvas.height
         );
         super(args.scene, args.x, y, 'ground');
+        this.groundOrientation = args.orientation;
 
         // physics
         this.body = new Body(this.scene.physics.world, this);
@@ -46,5 +48,14 @@ export class Ground extends Phaser.GameObjects.Image {
             return gameHeight - height;
         }
         return 0;
+    }
+
+    public getInnerBound(): number {
+        switch (this.groundOrientation) {
+            case GroundOrientation.TOP:
+                return this.y + Ground.defaultHeight;
+            case GroundOrientation.BOTTOM:
+                return this.y;
+        }
     }
 }
