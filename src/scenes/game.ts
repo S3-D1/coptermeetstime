@@ -159,7 +159,6 @@ export class GameScene extends Scene {
                                 y: ngy,
                                 texture: 'ground',
                             });
-                            this.movables.remove(g);
                             g.destroy();
                             this.movables.add(ng);
                         }
@@ -167,7 +166,6 @@ export class GameScene extends Scene {
                     case Clock.name:
                         const c = go as Clock;
                         if (c.x < -1 * c.width) {
-                            this.movables.remove(c);
                             c.destroy();
                         }
                 }
