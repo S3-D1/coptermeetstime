@@ -15,8 +15,9 @@ export class GameScene extends Scene {
     private score: number = 0;
     private scoreText!: Phaser.GameObjects.Text;
 
-    private timeLeft: number = 10;
+    private timeLeft: number = 20;
     private timeLeftText!: Phaser.GameObjects.Text;
+    private newClockSpawn: number = -1;
 
     private gameVelocity!: number;
     private gameOver: boolean = false;
@@ -75,6 +76,7 @@ export class GameScene extends Scene {
                 y: this.currentHeightTop,
                 texture: 'ground',
             });
+            this.newClockSpawn = -1;
             this.movables.add(g);
         }
 
@@ -83,12 +85,12 @@ export class GameScene extends Scene {
         this.gameVelocity = -200;
         this.movables.setVelocityX(this.gameVelocity);
         this.score = 0;
-        this.timeLeft = 10;
+        this.timeLeft = 20;
         this.gameOver = false;
         this.updateText();
     }
 
-    private createClock() {
+    private createClock(this: GameScene) {
         const upperBound = this.currentHeightTop + Ground.defaultHeight;
         const lowerBound = this.currentHeightBottom;
         const padding = 10;
@@ -96,6 +98,7 @@ export class GameScene extends Scene {
             lowerBound - padding - (upperBound + padding) - Clock.defaultHeight;
         const random = Math.random();
         const y = upperBound + padding + range * random;
+        this.newClockSpawn = y;
         // generate clock
         const c = new Clock({
             scene: this,
@@ -103,13 +106,13 @@ export class GameScene extends Scene {
             y,
             texture: 'clock',
         });
-        this.movables.add(c);
         this.time.delayedCall(
             0.8 * 1000 * this.clockTime,
             this.createClock,
             [],
             this
         );
+        this.movables.add(c);
     }
 
     public update(): void {
@@ -128,17 +131,22 @@ export class GameScene extends Scene {
                             const offset = random * this.groundMaxSize;
                             let ngy: number;
                             if (g.y < 0) {
-                                this.currentHeightTop =
-                                    random * this.groundMaxSize;
                                 ngy = -320 + offset + 32;
+                                if ( ngy + Ground.defaultHeight > this.newClockSpawn) {
+                                    ngy = this.newClockSpawn - 10 - Ground.defaultHeight;
+                                }
+                                this.currentHeightTop = ngy;
                             } else {
-                                this.currentHeightBottom =
-                                    random * this.groundMaxSize;
                                 ngy =
                                     this.sys.game.canvas.height -
                                     32 -
                                     offset -
                                     32;
+                                if ( ngy < this.newClockSpawn) {
+                                    ngy = this.newClockSpawn - 10;
+                                }
+                                this.currentHeightBottom = ngy;
+
                             }
                             const ng = new Ground({
                                 scene: this,
