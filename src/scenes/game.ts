@@ -101,6 +101,7 @@ export class GameScene extends Scene {
             y,
             texture: 'clock',
         });
+        this.time.delayedCall(300, this.resetClockSpwan, [], this);
         this.time.delayedCall(
             0.8 * 1000 * this.clockTime,
             this.createClock,
@@ -155,8 +156,6 @@ export class GameScene extends Scene {
                                         this.newClockSpawn -
                                         10 -
                                         Ground.defaultHeight;
-                                    this.newClockSpawn =
-                                        Number.NEGATIVE_INFINITY;
                                 }
                                 this.currentHeightTop = ngy;
                             } else {
@@ -173,8 +172,6 @@ export class GameScene extends Scene {
                                         this.newClockSpawn -
                                         Clock.defaultHeight -
                                         10;
-                                    this.newClockSpawn =
-                                        Number.NEGATIVE_INFINITY;
                                 }
                                 this.currentHeightBottom = ngy;
                             }
@@ -255,5 +252,9 @@ export class GameScene extends Scene {
             frameWidth: 32,
             frameHeight: 180,
         });
+    }
+
+    public resetClockSpwan(): void {
+        this.newClockSpawn = Number.NEGATIVE_INFINITY;
     }
 }
