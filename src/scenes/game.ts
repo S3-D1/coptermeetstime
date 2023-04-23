@@ -17,7 +17,8 @@ export class GameScene extends Scene {
     private timeLeftText!: Phaser.GameObjects.Text;
     private newClockSpawn: number = Number.NEGATIVE_INFINITY;
 
-    private readonly wallFrequency: number = 7;
+    private readonly wallMinimumDistanceInSeconds: number = 0.5;
+    private readonly wallMaximumDistanceInSeconds: number = 3;
 
     private gameVelocity!: number;
     private gameOver: boolean = false;
@@ -101,7 +102,9 @@ export class GameScene extends Scene {
             texture: 'wall',
         });
         this.time.delayedCall(
-            this.wallFrequency * random * 1000,
+            1000 *
+                (this.wallMinimumDistanceInSeconds +
+                    this.wallMaximumDistanceInSeconds * random),
             this.createWall,
             [],
             this
