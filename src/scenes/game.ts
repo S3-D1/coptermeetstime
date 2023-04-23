@@ -59,10 +59,9 @@ export class GameScene extends Scene {
     }
 
     private createClock() {
-        const upperBound =
-            this.groundManager.currentHeightTop + Ground.defaultHeight;
+        const upperBound = this.groundManager.currentHeightTop;
         const lowerBound = this.groundManager.currentHeightBottom;
-        const padding = 10;
+        const padding = 20;
         const range =
             lowerBound - padding - (upperBound + padding) - Clock.defaultHeight;
         const random = Math.random();

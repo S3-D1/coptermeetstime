@@ -60,9 +60,11 @@ export class GroundManager {
                         let ngy: number;
                         if (g.y < 0) {
                             ngy = -Ground.defaultHeight + offset + 32;
-                            if (newClockSpawn < ngy + Ground.defaultHeight) {
+                            if (
+                                newClockSpawn > 0 &&
+                                newClockSpawn < ngy + Ground.defaultHeight
+                            ) {
                                 ngy = newClockSpawn - 10 - Ground.defaultHeight;
-                                newClockSpawn = Number.NEGATIVE_INFINITY;
                             }
                             this.currentHeightTop = ngy;
                         } else {
@@ -72,8 +74,7 @@ export class GroundManager {
                                 offset -
                                 32;
                             if (ngy < newClockSpawn - Clock.defaultHeight) {
-                                ngy = newClockSpawn - Clock.defaultHeight - 10;
-                                newClockSpawn = Number.NEGATIVE_INFINITY;
+                                ngy = newClockSpawn + Clock.defaultHeight + 10;
                             }
                             this.currentHeightBottom = ngy;
                         }
