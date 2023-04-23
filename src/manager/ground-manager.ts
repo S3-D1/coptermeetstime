@@ -24,7 +24,7 @@ export class GroundManager {
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.BOTTOM,
-                height: height,
+                height,
             });
             this.currentHeightBottom = g.getInnerBound();
             movables.add(g);
@@ -36,7 +36,7 @@ export class GroundManager {
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.TOP,
-                height: height,
+                height,
             });
             this.currentHeightTop = g.getInnerBound();
             movables.add(g);
