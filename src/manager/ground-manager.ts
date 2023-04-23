@@ -18,27 +18,27 @@ export class GroundManager {
         for (let i = 0; i < (this.scene.sys.game.canvas.width + 92) / 32; i++) {
             // generate bottom
             let random = Math.random();
-            let height = random * this.groundMaxSize;
-            this.currentHeightBottom =
-                this.scene.sys.game.canvas.height - height - this.groundMinSize;
+            let height = random * this.groundMaxSize + this.groundMinSize;
+
             let g = new Ground({
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.BOTTOM,
-                innerBound: this.currentHeightBottom,
+                height: height,
             });
+            this.currentHeightBottom = g.y;
             movables.add(g);
 
             // generate top
             random = Math.random();
-            height = random * this.groundMaxSize;
-            this.currentHeightTop = height + this.groundMinSize;
+            height = random * this.groundMaxSize + this.groundMinSize;
             g = new Ground({
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.TOP,
-                innerBound: this.currentHeightTop,
+                height: height,
             });
+            this.currentHeightTop = g.y;
             movables.add(g);
         }
     }
@@ -57,40 +57,45 @@ export class GroundManager {
                             g.x + 32 + this.scene.sys.game.canvas.width + 32;
                         const random = Math.random();
                         const offset = random * this.groundMaxSize;
-                        let innerBound: number;
+                        let boundaryHeight: number;
                         let orientation: number;
+                        boundaryHeight = offset + this.groundMinSize;
                         if (g.y < 0) {
                             orientation = GroundOrientation.TOP;
-                            innerBound = offset + this.groundMinSize;
                             if (
                                 newClockSpawn > 0 &&
-                                newClockSpawn < innerBound
+                                newClockSpawn < boundaryHeight
                             ) {
-                                innerBound = newClockSpawn - 10;
+                                boundaryHeight = newClockSpawn - 10;
                             }
-                            this.currentHeightTop = innerBound;
                         } else {
                             orientation = GroundOrientation.BOTTOM;
-                            innerBound =
-                                this.scene.sys.game.canvas.height -
-                                32 -
-                                offset -
-                                this.groundMinSize;
                             if (
-                                innerBound <
+                                this.scene.game.canvas.height - boundaryHeight <
                                 newClockSpawn - Clock.defaultHeight
                             ) {
-                                innerBound =
-                                    newClockSpawn + Clock.defaultHeight + 10;
+                                boundaryHeight =
+                                    this.scene.game.canvas.height -
+                                    newClockSpawn -
+                                    Clock.defaultHeight -
+                                    10;
                             }
-                            this.currentHeightBottom = innerBound;
                         }
                         const ng = new Ground({
                             scene: this.scene,
                             x: ngx,
                             orientation,
-                            innerBound,
+                            height: boundaryHeight,
                         });
+                        switch (orientation) {
+                            case GroundOrientation.TOP:
+                                this.currentHeightTop = g.y;
+                                break;
+                            case GroundOrientation.BOTTOM:
+                                this.currentHeightBottom = g.y;
+                                break;
+                        }
+
                         g.destroy();
                         movables.add(ng);
                     }
