@@ -1,20 +1,19 @@
 import Body = Phaser.Physics.Arcade.Body;
 import { IImageConstructor } from '../interfaces/image.interface';
 
+interface ConstructorArgs {
+    scene: Phaser.Scene;
+    x: number;
+    y: number;
+}
 export class Copter extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
     isCrashed: boolean;
 
     private readonly jumpKey: Phaser.Input.Keyboard.Key;
 
-    constructor(aParams: IImageConstructor) {
-        super(
-            aParams.scene,
-            aParams.x,
-            aParams.y,
-            aParams.texture,
-            aParams.frame
-        );
+    constructor(aParams: ConstructorArgs) {
+        super(aParams.scene, aParams.x, aParams.y, 'copter');
 
         this.isCrashed = false;
 

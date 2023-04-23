@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 import { Copter } from '../objects/copter';
 import { Ground } from '../objects/ground';
 import { Clock } from '../objects/clock';
-import {Wall} from "../objects/wall";
+import { Wall } from '../objects/wall';
 
 export class GameScene extends Scene {
     private readonly groundMaxSize = 75;
@@ -33,16 +33,7 @@ export class GameScene extends Scene {
     }
 
     public preload(): void {
-        this.load.image('ground', 'assets/ground-long.png');
-        this.load.image('clock', 'assets/clock.png');
-        this.load.spritesheet('copter', 'assets/copter.png', {
-            frameWidth: 42,
-            frameHeight: 26,
-        });
-        this.load.spritesheet('wall', 'assets/ground-long.png', {
-            frameWidth: 32,
-            frameHeight: 180,
-        });
+        this.loadAssets();
         this.scoreText = this.add.text(16, 120, 'score: 0');
         this.timeLeftText = this.add.text(16, 140, 'time left: 0');
     }
@@ -52,7 +43,6 @@ export class GameScene extends Scene {
             scene: this,
             x: 150,
             y: 150,
-            texture: 'copter',
         });
         this.movables = this.physics.add.group();
 
@@ -120,17 +110,11 @@ export class GameScene extends Scene {
         this.movables.add(c);
     }
     private createWall() {
-        if( this.newClockSpawn > 0 ) {
-            this.time.delayedCall(
-              700,
-                this.createWall,
-                [],
-                this
-            );
+        if (this.newClockSpawn > 0) {
+            this.time.delayedCall(700, this.createWall, [], this);
             return;
         }
-        const range =
-           this.sys.canvas.height - Wall.defaultHeight;
+        const range = this.sys.canvas.height - Wall.defaultHeight;
         const random = Math.random();
         const y = range * random;
         // generate wall
@@ -140,12 +124,7 @@ export class GameScene extends Scene {
             y,
             texture: 'wall',
         });
-        this.time.delayedCall(
-            10 * random * 1000,
-            this.createWall,
-            [],
-            this
-        );
+        this.time.delayedCall(10 * random * 1000, this.createWall, [], this);
         this.movables.add(w);
     }
 
@@ -161,20 +140,23 @@ export class GameScene extends Scene {
                     case Ground.name:
                         const g = go as Ground;
                         if (g.x < -32) {
-                            const ngx = g.x + 32 + this.sys.game.canvas.width + 32;
+                            const ngx =
+                                g.x + 32 + this.sys.game.canvas.width + 32;
                             const random = Math.random();
                             const offset = random * this.groundMaxSize;
                             let ngy: number;
                             if (g.y < 0) {
                                 ngy = -Ground.defaultHeight + offset + 32;
                                 if (
-                                    this.newClockSpawn < ngy + Ground.defaultHeight
+                                    this.newClockSpawn <
+                                    ngy + Ground.defaultHeight
                                 ) {
                                     ngy =
                                         this.newClockSpawn -
                                         10 -
                                         Ground.defaultHeight;
-                                    this.newClockSpawn = Number.NEGATIVE_INFINITY;
+                                    this.newClockSpawn =
+                                        Number.NEGATIVE_INFINITY;
                                 }
                                 this.currentHeightTop = ngy;
                             } else {
@@ -183,9 +165,16 @@ export class GameScene extends Scene {
                                     32 -
                                     offset -
                                     32;
-                                if (ngy < this.newClockSpawn - Clock.defaultHeight) {
-                                    ngy = this.newClockSpawn - Clock.defaultHeight - 10;
-                                    this.newClockSpawn = Number.NEGATIVE_INFINITY;
+                                if (
+                                    ngy <
+                                    this.newClockSpawn - Clock.defaultHeight
+                                ) {
+                                    ngy =
+                                        this.newClockSpawn -
+                                        Clock.defaultHeight -
+                                        10;
+                                    this.newClockSpawn =
+                                        Number.NEGATIVE_INFINITY;
                                 }
                                 this.currentHeightBottom = ngy;
                             }
@@ -215,7 +204,7 @@ export class GameScene extends Scene {
         }
         this.movables.setVelocityX(this.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
-            if(object1.constructor.name === Copter.name) {
+            if (object1.constructor.name === Copter.name) {
                 switch (object2.constructor.name) {
                     case Ground.name:
                     case Wall.name:
@@ -223,7 +212,9 @@ export class GameScene extends Scene {
                         break;
                     case Clock.name:
                         this.timeLeft += this.clockTime;
-                        this.timeLeftText.setText('time left: ' + this.timeLeft);
+                        this.timeLeftText.setText(
+                            'time left: ' + this.timeLeft
+                        );
                         object2.destroy();
                 }
             }
@@ -253,6 +244,16 @@ export class GameScene extends Scene {
     public restart(): void {
         this.scene.start('ScoreBoardScene', {
             score: this.score,
+        });
+    }
+
+    private loadAssets(): void {
+        this.load.image('ground', 'assets/ground-long.png');
+        this.load.image('clock', 'assets/clock.png');
+        this.load.image('copter', 'assets/copter.png');
+        this.load.spritesheet('wall', 'assets/ground-long.png', {
+            frameWidth: 32,
+            frameHeight: 180,
         });
     }
 }
