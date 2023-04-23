@@ -4,7 +4,7 @@ import Body = Phaser.Physics.Arcade.Body;
 export class Wall extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
 
-    public static readonly defaultHeight = 140;
+    public static readonly defaultHeight = 180;
 
     constructor(aParams: IImageConstructor) {
         super(
