@@ -17,12 +17,12 @@ export class GameScene extends Scene {
     private timeLeftText!: Phaser.GameObjects.Text;
     private newClockSpawn: number = Number.NEGATIVE_INFINITY;
 
-    private wallFrequency: number = 7;
+    private readonly wallFrequency: number = 7;
 
     private gameVelocity!: number;
     private gameOver: boolean = false;
 
-    private groundManager: GroundManager;
+    private readonly groundManager: GroundManager;
 
     private readonly clockTime = 10;
 

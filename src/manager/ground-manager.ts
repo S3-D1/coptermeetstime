@@ -4,10 +4,10 @@ import { Clock } from '../objects/clock';
 export class GroundManager {
     private readonly groundMaxSize: number = 75;
     private readonly groundMinSize: number = 32;
+    private readonly scene: Phaser.Scene;
 
     public currentHeightTop: number = 0;
     public currentHeightBottom: number = 0;
-    private scene: Phaser.Scene;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
