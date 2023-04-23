@@ -1,4 +1,3 @@
-import { IImageConstructor } from '../interfaces/image.interface';
 import Body = Phaser.Physics.Arcade.Body;
 
 interface ConstructorArgs {
@@ -43,7 +42,7 @@ export class Ground extends Phaser.GameObjects.Image {
         canvasHeight: number
     ): number {
         if (orientation === GroundOrientation.TOP) {
-            return -Ground.defaultHeight + height;
+            return height - Ground.defaultHeight / 2;
         }
         if (orientation === GroundOrientation.BOTTOM) {
             return canvasHeight - height;

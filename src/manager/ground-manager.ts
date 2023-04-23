@@ -36,7 +36,7 @@ export class GroundManager {
                 scene: this.scene,
                 x: i * 32,
                 orientation: GroundOrientation.TOP,
-                height: this.currentHeightTop + 150,
+                height: this.currentHeightTop,
             });
             movables.add(g);
         }
