@@ -17,6 +17,8 @@ export class GameScene extends Scene {
     private timeLeftText!: Phaser.GameObjects.Text;
     private newClockSpawn: number = Number.NEGATIVE_INFINITY;
 
+    private wallFrequency: number = 7;
+
     private gameVelocity!: number;
     private gameOver: boolean = false;
 
@@ -98,7 +100,12 @@ export class GameScene extends Scene {
             y,
             texture: 'wall',
         });
-        this.time.delayedCall(10 * random * 1000, this.createWall, [], this);
+        this.time.delayedCall(
+            this.wallFrequency * random * 1000,
+            this.createWall,
+            [],
+            this
+        );
         this.movables.add(w);
     }
 
@@ -176,8 +183,8 @@ export class GameScene extends Scene {
         this.load.image('clock', 'assets/clock.png');
         this.load.image('copter', 'assets/copter.png');
         this.load.spritesheet('wall', 'assets/ground-long.png', {
-            frameWidth: 32,
-            frameHeight: 180,
+            frameWidth: 20,
+            frameHeight: Wall.defaultHeight,
         });
     }
 
