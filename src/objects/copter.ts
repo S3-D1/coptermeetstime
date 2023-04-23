@@ -8,6 +8,7 @@ interface ConstructorArgs {
 export class Copter extends Phaser.GameObjects.Image {
     private static readonly MAX_SPEED: number = 200;
     private static readonly ACCELERATION: number = 20;
+    private static readonly GRAVITY: number = 900;
 
     body: Phaser.Physics.Arcade.Body;
     isCrashed: boolean;
@@ -30,7 +31,7 @@ export class Copter extends Phaser.GameObjects.Image {
 
         this.scene.add.existing(this);
 
-        this.body.setGravityY(1000);
+        this.body.setGravityY(Copter.GRAVITY);
         // input
         this.jumpKey = this.scene.input.keyboard!.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
