@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { Copter } from '../objects/copter';
 import { Ground } from '../objects/ground';
 import { Clock } from '../objects/clock';
+import {Wall} from "../objects/wall";
 
 export class GameScene extends Scene {
     private readonly groundMaxSize = 75;
@@ -37,6 +38,10 @@ export class GameScene extends Scene {
         this.load.spritesheet('copter', 'assets/copter.png', {
             frameWidth: 42,
             frameHeight: 26,
+        });
+        this.load.spritesheet('wall', 'assets/ground-long.png', {
+            frameWidth: 32,
+            frameHeight: 180,
         });
         this.scoreText = this.add.text(16, 120, 'score: 0');
         this.timeLeftText = this.add.text(16, 140, 'time left: 0');
@@ -80,6 +85,7 @@ export class GameScene extends Scene {
         }
 
         this.createClock();
+        this.createWall();
 
         this.gameVelocity = -200;
         this.movables.setVelocityX(this.gameVelocity);
@@ -89,7 +95,7 @@ export class GameScene extends Scene {
         this.updateText();
     }
 
-    private createClock(this: GameScene) {
+    private createClock() {
         const upperBound = this.currentHeightTop + Ground.defaultHeight;
         const lowerBound = this.currentHeightBottom;
         const padding = 10;
@@ -112,6 +118,35 @@ export class GameScene extends Scene {
             this
         );
         this.movables.add(c);
+    }
+    private createWall() {
+        if( this.newClockSpawn > 0 ) {
+            this.time.delayedCall(
+              700,
+                this.createWall,
+                [],
+                this
+            );
+            return;
+        }
+        const range =
+           this.sys.canvas.height - Wall.defaultHeight;
+        const random = Math.random();
+        const y = range * random;
+        // generate wall
+        const w = new Wall({
+            scene: this,
+            x: this.sys.game.canvas.width + 50,
+            y,
+            texture: 'wall',
+        });
+        this.time.delayedCall(
+            10 * random * 1000,
+            this.createWall,
+            [],
+            this
+        );
+        this.movables.add(w);
     }
 
     public update(): void {
@@ -169,19 +204,28 @@ export class GameScene extends Scene {
                         if (c.x < -1 * c.width) {
                             c.destroy();
                         }
+                        break;
+                    case Wall.name:
+                        const w = go as Wall;
+                        if (w.x < -1 * w.width) {
+                            w.destroy();
+                        }
                 }
             }
         }
         this.movables.setVelocityX(this.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
-            switch (object2.constructor.name) {
-                case Ground.name:
-                    this.setGameOver();
-                    break;
-                case Clock.name:
-                    this.timeLeft += this.clockTime;
-                    this.timeLeftText.setText('time left: ' + this.timeLeft);
-                    object2.destroy();
+            if(object1.constructor.name === Copter.name) {
+                switch (object2.constructor.name) {
+                    case Ground.name:
+                    case Wall.name:
+                        this.setGameOver();
+                        break;
+                    case Clock.name:
+                        this.timeLeft += this.clockTime;
+                        this.timeLeftText.setText('time left: ' + this.timeLeft);
+                        object2.destroy();
+                }
             }
         });
     }
