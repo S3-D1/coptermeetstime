@@ -56,6 +56,7 @@ export class GameScene extends Scene {
         this.timeLeft = this.gameManager.initialTime;
         this.gameOver = false;
         this.updateText();
+        this.sound.play('mainTheme', { loop: true });
     }
 
     private createClock() {
@@ -159,6 +160,7 @@ export class GameScene extends Scene {
     }
 
     private setGameOver() {
+        this.sound.stopAll();
         this.gameOver = true;
         this.copter.gameOver();
         this.gameManager.setGameVelocity(0);
@@ -192,6 +194,7 @@ export class GameScene extends Scene {
             frameWidth: 20,
             frameHeight: this.gameManager.wallHeight,
         });
+        this.load.audio('mainTheme', 'assets/MainTheme.wav');
     }
 
     public resetClockSpawn(): void {
