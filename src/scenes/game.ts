@@ -41,6 +41,7 @@ export class GameScene extends Scene {
             scene: this,
             x: 150,
             y: 150,
+            gameManager: this.gameManager,
         });
         this.movables = this.physics.add.group();
 

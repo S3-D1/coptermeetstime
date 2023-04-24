@@ -16,6 +16,11 @@ export class GameManager {
 
     public restartTime!: number;
 
+    public copterMaxSpeed: number = 200;
+    public copterMinSpeed: number = 0;
+    public copterAccelaration: number = 15;
+    public copterGravity: number = 800;
+
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
     }
@@ -33,6 +38,11 @@ export class GameManager {
         this.initialTime = 20;
 
         this.restartTime = 2000;
+
+        this.copterMaxSpeed = 200;
+        this.copterMinSpeed = 0;
+        this.copterAccelaration = 15;
+        this.copterGravity = 800;
     }
 
     setGameVelocity(newValue: number, setForTime: number = 0) {

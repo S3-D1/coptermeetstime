@@ -1,15 +1,14 @@
 import Body = Phaser.Physics.Arcade.Body;
+import { GameManager } from '../manager/game-manager';
 
 interface ConstructorArgs {
     scene: Phaser.Scene;
     x: number;
     y: number;
+    gameManager: GameManager;
 }
 export class Copter extends Phaser.GameObjects.Image {
-    private static readonly MAX_SPEED: number = 200;
-    private static readonly MIN_SPEED: number = 0;
-    private static readonly ACCELERATION: number = 15;
-    private static readonly GRAVITY: number = 800;
+    private readonly gameManager: GameManager;
 
     body: Phaser.Physics.Arcade.Body;
     isCrashed: boolean;
@@ -18,6 +17,7 @@ export class Copter extends Phaser.GameObjects.Image {
 
     constructor(aParams: ConstructorArgs) {
         super(aParams.scene, aParams.x, aParams.y, 'copter');
+        this.gameManager = aParams.gameManager;
 
         this.isCrashed = false;
 
@@ -32,7 +32,7 @@ export class Copter extends Phaser.GameObjects.Image {
 
         this.scene.add.existing(this);
 
-        this.body.setGravityY(Copter.GRAVITY);
+        this.body.setGravityY(this.gameManager.copterGravity);
         // input
         this.jumpKey = this.scene.input.keyboard!.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -48,9 +48,9 @@ export class Copter extends Phaser.GameObjects.Image {
             (this.jumpKey.isDown || this.scene.input.activePointer.isDown)
         ) {
             const acc = clamp(
-                this.body.velocity.y - Copter.ACCELERATION,
-                -Copter.MAX_SPEED,
-                Copter.MIN_SPEED
+                this.body.velocity.y - this.gameManager.copterAccelaration,
+                -this.gameManager.copterMaxSpeed,
+                this.gameManager.copterMinSpeed
             );
             this.body.setVelocityY(acc);
         }
