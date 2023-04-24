@@ -194,7 +194,6 @@ export class GameScene extends Scene {
             frameWidth: 20,
             frameHeight: this.gameManager.wallHeight,
         });
-        this.load.audio('mainTheme', 'assets/MainTheme.wav');
     }
 
     public resetClockSpawn(): void {
