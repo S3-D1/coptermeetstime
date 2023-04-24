@@ -1,18 +1,20 @@
-import { IImageConstructor } from '../interfaces/image.interface';
 import Body = Phaser.Physics.Arcade.Body;
+
+interface ConstructorArgs {
+    scene: Phaser.Scene;
+    y: number;
+    height: number;
+}
 
 export class Wall extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body;
 
-    public static readonly defaultHeight = 180;
-
-    constructor(aParams: IImageConstructor) {
+    constructor(args: ConstructorArgs) {
         super(
-            aParams.scene,
-            aParams.x,
-            aParams.y,
-            aParams.texture,
-            aParams.frame
+            args.scene,
+            args.scene.sys.game.canvas.width + 50,
+            args.y,
+            'wall'
         );
 
         // image
@@ -23,7 +25,7 @@ export class Wall extends Phaser.GameObjects.Image {
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
         this.body.allowGravity = false;
-        this.body.setSize(20, Wall.defaultHeight);
+        this.body.setSize(20, args.height);
         this.scene.add.existing(this);
     }
 }

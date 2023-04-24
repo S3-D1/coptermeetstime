@@ -1,16 +1,17 @@
 import { Ground, GroundOrientation } from '../objects/ground';
 import { Clock } from '../objects/clock';
+import { GameManager } from './game-manager';
 
 export class GroundManager {
-    private readonly groundMaxSize: number = 65;
-    private readonly groundMinSize: number = 20;
+    private readonly gameManager: GameManager;
     private readonly scene: Phaser.Scene;
 
     public currentHeightTop: number = 0;
     public currentHeightBottom: number = 0;
 
-    constructor(scene: Phaser.Scene) {
+    constructor(scene: Phaser.Scene, gameManager: GameManager) {
         this.scene = scene;
+        this.gameManager = gameManager;
     }
 
     public setupGround(movables: Phaser.Physics.Arcade.Group) {
@@ -18,7 +19,9 @@ export class GroundManager {
         for (let i = 0; i < (this.scene.sys.game.canvas.width + 92) / 32; i++) {
             // generate bottom
             let random = Math.random();
-            let height = random * this.groundMaxSize + this.groundMinSize;
+            let height =
+                random * this.gameManager.groundMaxVariableSize +
+                this.gameManager.groundMinSize;
 
             let g = new Ground({
                 scene: this.scene,
@@ -31,7 +34,9 @@ export class GroundManager {
 
             // generate top
             random = Math.random();
-            height = random * this.groundMaxSize + this.groundMinSize;
+            height =
+                random * this.gameManager.groundMaxVariableSize +
+                this.gameManager.groundMinSize;
             g = new Ground({
                 scene: this.scene,
                 x: i * 32,
@@ -56,9 +61,11 @@ export class GroundManager {
                         const ngx =
                             g.x + 32 + this.scene.sys.game.canvas.width + 32;
                         const random = Math.random();
-                        const offset = random * this.groundMaxSize;
+                        const offset =
+                            random * this.gameManager.groundMaxVariableSize;
                         let boundaryHeight: number;
-                        boundaryHeight = offset + this.groundMinSize;
+                        boundaryHeight =
+                            offset + this.gameManager.groundMinSize;
                         if (g.groundOrientation === GroundOrientation.TOP) {
                             if (
                                 newClockSpawn > 0 &&

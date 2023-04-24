@@ -4,6 +4,7 @@ import { Ground } from '../objects/ground';
 import { Clock } from '../objects/clock';
 import { Wall } from '../objects/wall';
 import { GroundManager } from '../manager/ground-manager';
+import { GameManager } from '../manager/game-manager';
 
 export class GameScene extends Scene {
     private movables!: Phaser.Physics.Arcade.Group;
@@ -13,24 +14,19 @@ export class GameScene extends Scene {
     private score: number = 0;
     private scoreText!: Phaser.GameObjects.Text;
 
-    private timeLeft: number = 20;
+    private timeLeft!: number;
     private timeLeftText!: Phaser.GameObjects.Text;
     private newClockSpawn: number = Number.NEGATIVE_INFINITY;
 
-    private readonly wallMinimumDistanceInSeconds: number = 0.5;
-    private readonly wallMaximumDistanceInSeconds: number = 3;
-
-    private gameVelocity!: number;
     private gameOver: boolean = false;
 
+    private readonly gameManager: GameManager;
     private readonly groundManager: GroundManager;
-
-    private readonly clockTime = 10;
 
     constructor() {
         super({ key: 'GameScene' });
-
-        this.groundManager = new GroundManager(this);
+        this.gameManager = new GameManager(this);
+        this.groundManager = new GroundManager(this, this.gameManager);
     }
 
     public preload(): void {
@@ -40,6 +36,7 @@ export class GameScene extends Scene {
     }
 
     public create(): void {
+        this.gameManager.reset();
         this.copter = new Copter({
             scene: this,
             x: 150,
@@ -53,10 +50,9 @@ export class GameScene extends Scene {
         this.createClock();
         this.createWall();
 
-        this.gameVelocity = -200;
-        this.movables.setVelocityX(this.gameVelocity);
+        this.movables.setVelocityX(this.gameManager.gameVelocity);
         this.score = 0;
-        this.timeLeft = 20;
+        this.timeLeft = this.gameManager.initialTime;
         this.gameOver = false;
         this.updateText();
     }
@@ -79,7 +75,7 @@ export class GameScene extends Scene {
         });
         this.time.delayedCall(300, this.resetClockSpawn, [], this);
         this.time.delayedCall(
-            0.8 * 1000 * this.clockTime,
+            this.gameManager.clockFrequency * 1000 * this.gameManager.clockTime,
             this.createClock,
             [],
             this
@@ -88,23 +84,27 @@ export class GameScene extends Scene {
     }
     private createWall() {
         if (this.newClockSpawn > 0) {
-            this.time.delayedCall(700, this.createWall, [], this);
+            this.time.delayedCall(
+                this.gameManager.wallPreventionTime,
+                this.createWall,
+                [],
+                this
+            );
             return;
         }
-        const range = this.sys.canvas.height - Wall.defaultHeight;
+        const range = this.sys.canvas.height - this.gameManager.wallHeight;
         const random = Math.random();
         const y = range * random;
         // generate wall
         const w = new Wall({
             scene: this,
-            x: this.sys.game.canvas.width + 50,
             y,
-            texture: 'wall',
+            height: this.gameManager.wallHeight,
         });
         this.time.delayedCall(
             1000 *
-                (this.wallMinimumDistanceInSeconds +
-                    this.wallMaximumDistanceInSeconds * random),
+                (this.gameManager.wallMinDistanceInSeconds +
+                    this.gameManager.wallMaxVariableDistanceInSeconds * random),
             this.createWall,
             [],
             this
@@ -116,7 +116,12 @@ export class GameScene extends Scene {
         this.copter.update();
         if (this.gameOver) {
             this.add.text(360, 240, 'Game Over!');
-            this.time.delayedCall(2000, this.restart, [], this);
+            this.time.delayedCall(
+                this.gameManager.restartTime,
+                this.restart,
+                [],
+                this
+            );
         } else {
             this.groundManager.update(this.movables, this.newClockSpawn);
             // remove old ground and generate new one
@@ -136,7 +141,7 @@ export class GameScene extends Scene {
                 }
             }
         }
-        this.movables.setVelocityX(this.gameVelocity);
+        this.movables.setVelocityX(this.gameManager.gameVelocity);
         this.physics.overlap(this.copter, this.movables, (object1, object2) => {
             if (object1.constructor.name === Copter.name) {
                 switch (object2.constructor.name) {
@@ -145,10 +150,7 @@ export class GameScene extends Scene {
                         this.setGameOver();
                         break;
                     case Clock.name:
-                        this.timeLeft += this.clockTime;
-                        this.timeLeftText.setText(
-                            'time left: ' + this.timeLeft
-                        );
+                        this.timeLeft += this.gameManager.clockTime;
                         object2.destroy();
                 }
             }
@@ -158,7 +160,7 @@ export class GameScene extends Scene {
     private setGameOver() {
         this.gameOver = true;
         this.copter.gameOver();
-        this.gameVelocity = 0;
+        this.gameManager.setGameVelocity(0);
     }
 
     public updateText(): void {
@@ -166,8 +168,8 @@ export class GameScene extends Scene {
             this.score++;
             this.scoreText.setText('score: ' + this.score);
             this.timeLeft--;
-            this.timeLeftText.setText('time left: ' + this.timeLeft);
-            if (this.timeLeft === 0) {
+            this.timeLeftText.setText('time left: ' + this.timeLeft.toFixed(0));
+            if (this.timeLeft <= 0) {
                 this.setGameOver();
             } else {
                 this.time.delayedCall(1000, this.updateText, [], this);
@@ -187,7 +189,7 @@ export class GameScene extends Scene {
         this.load.image('copter', 'assets/copter.png');
         this.load.spritesheet('wall', 'assets/ground-long.png', {
             frameWidth: 20,
-            frameHeight: Wall.defaultHeight,
+            frameHeight: this.gameManager.wallHeight,
         });
     }
 
