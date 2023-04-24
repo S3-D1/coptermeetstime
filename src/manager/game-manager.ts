@@ -41,7 +41,7 @@ export class GameManager {
 
         this.copterMaxSpeed = 200;
         this.copterMinSpeed = 0;
-        this.copterAcceleration = 15;
+        this.copterAcceleration = 30;
         this.copterGravity = 800;
     }
 
