@@ -48,7 +48,7 @@ export class Copter extends Phaser.GameObjects.Image {
             (this.jumpKey.isDown || this.scene.input.activePointer.isDown)
         ) {
             const acc = clamp(
-                this.body.velocity.y - this.gameManager.copterAccelaration,
+                this.body.velocity.y - this.gameManager.copterAcceleration,
                 -this.gameManager.copterMaxSpeed,
                 this.gameManager.copterMinSpeed
             );

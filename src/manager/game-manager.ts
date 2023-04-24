@@ -16,10 +16,10 @@ export class GameManager {
 
     public restartTime!: number;
 
-    public copterMaxSpeed: number = 200;
-    public copterMinSpeed: number = 0;
-    public copterAccelaration: number = 15;
-    public copterGravity: number = 800;
+    public copterMaxSpeed!: number;
+    public copterMinSpeed!: number;
+    public copterAcceleration!: number;
+    public copterGravity!: number;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
@@ -41,7 +41,7 @@ export class GameManager {
 
         this.copterMaxSpeed = 200;
         this.copterMinSpeed = 0;
-        this.copterAccelaration = 15;
+        this.copterAcceleration = 15;
         this.copterGravity = 800;
     }
 
