@@ -74,7 +74,7 @@ export class GameScene extends Scene {
             y,
             texture: 'clock',
         });
-        this.time.delayedCall(300, this.resetClockSpawn, [], this);
+        this.time.delayedCall(500, this.resetClockSpawn, [], this);
         this.time.delayedCall(
             this.gameManager.clockFrequency * 1000 * this.gameManager.clockTime,
             this.createClock,
