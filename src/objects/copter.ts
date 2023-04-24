@@ -7,8 +7,9 @@ interface ConstructorArgs {
 }
 export class Copter extends Phaser.GameObjects.Image {
     private static readonly MAX_SPEED: number = 200;
-    private static readonly ACCELERATION: number = 20;
-    private static readonly GRAVITY: number = 900;
+    private static readonly MIN_SPEED: number = 0;
+    private static readonly ACCELERATION: number = 15;
+    private static readonly GRAVITY: number = 800;
 
     body: Phaser.Physics.Arcade.Body;
     isCrashed: boolean;
@@ -46,9 +47,10 @@ export class Copter extends Phaser.GameObjects.Image {
             !this.isCrashed &&
             (this.jumpKey.isDown || this.scene.input.activePointer.isDown)
         ) {
-            const acc = Math.max(
+            const acc = clamp(
                 this.body.velocity.y - Copter.ACCELERATION,
-                -Copter.MAX_SPEED
+                -Copter.MAX_SPEED,
+                Copter.MIN_SPEED
             );
             this.body.setVelocityY(acc);
         }
@@ -62,4 +64,8 @@ export class Copter extends Phaser.GameObjects.Image {
         this.body.setGravityY(0);
         this.body.setVelocityY(0);
     }
+}
+
+function clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
 }
