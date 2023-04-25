@@ -7,7 +7,7 @@ interface ConstructorArgs {
     y: number;
     gameManager: GameManager;
 }
-export class Copter extends Phaser.GameObjects.Image {
+export class Copter extends Phaser.GameObjects.Sprite {
     private readonly gameManager: GameManager;
 
     body: Phaser.Physics.Arcade.Body;
@@ -28,7 +28,7 @@ export class Copter extends Phaser.GameObjects.Image {
         // physics
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
-        this.body.setSize(42, 26);
+        this.body.setSize(42, 25);
 
         this.scene.add.existing(this);
 

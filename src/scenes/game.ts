@@ -37,12 +37,22 @@ export class GameScene extends Scene {
 
     public create(): void {
         this.gameManager.reset();
+        this.anims.create({
+            key: 'copter',
+            frameRate: 24,
+            frames: this.anims.generateFrameNumbers('copter', {
+                start: 0,
+                end: 9,
+            }),
+            repeat: -1,
+        });
         this.copter = new Copter({
             scene: this,
             x: 150,
             y: 150,
             gameManager: this.gameManager,
         });
+        this.copter.play('copter');
         this.movables = this.physics.add.group();
 
         // generate ground
@@ -162,6 +172,7 @@ export class GameScene extends Scene {
     private setGameOver() {
         this.sound.stopAll();
         this.gameOver = true;
+        this.copter.stop();
         this.copter.gameOver();
         this.gameManager.setGameVelocity(0);
     }
