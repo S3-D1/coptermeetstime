@@ -42,7 +42,6 @@ export class GameScene extends Scene {
     }
 
     public create(): void {
-        this.difficultyManager.update(this.score);
         this.gameManager.reset();
         this.anims.create({
             key: 'copter',
@@ -127,6 +126,7 @@ export class GameScene extends Scene {
     }
 
     public update(): void {
+        this.difficultyManager.update(this.score);
         this.music.setRate(this.gameManager.gameMusicRate);
         this.copter.update();
         if (this.gameOver) {

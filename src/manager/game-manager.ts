@@ -31,7 +31,7 @@ export class GameManager {
         this.groundMinSize = 20;
         this.groundMaxVariableSize = 65;
 
-        this.wallMinDistanceInSeconds = 2;
+        this.wallMinDistanceInSeconds = 1.5;
         this.wallMaxVariableDistanceInSeconds = 4;
 
         this.gameVelocity = -200;
