@@ -5,9 +5,13 @@ import { Clock } from '../objects/clock';
 import { Wall } from '../objects/wall';
 import { GroundManager } from '../manager/ground-manager';
 import { GameManager } from '../manager/game-manager';
+import HTML5AudioSound = Phaser.Sound.HTML5AudioSound;
+import { DifficultyManager } from '../manager/difficulty-manager';
 
 export class GameScene extends Scene {
     private movables!: Phaser.Physics.Arcade.Group;
+
+    private music!: Phaser.Sound.HTML5AudioSound;
 
     private copter!: Copter;
 
@@ -21,11 +25,13 @@ export class GameScene extends Scene {
     private gameOver: boolean = false;
 
     private readonly gameManager: GameManager;
+    private readonly difficultyManager: DifficultyManager;
     private readonly groundManager: GroundManager;
 
     constructor() {
         super({ key: 'GameScene' });
         this.gameManager = new GameManager(this);
+        this.difficultyManager = new DifficultyManager(this.gameManager);
         this.groundManager = new GroundManager(this, this.gameManager);
     }
 
@@ -36,6 +42,7 @@ export class GameScene extends Scene {
     }
 
     public create(): void {
+        this.difficultyManager.update(this.score);
         this.gameManager.reset();
         this.anims.create({
             key: 'copter',
@@ -66,7 +73,11 @@ export class GameScene extends Scene {
         this.timeLeft = this.gameManager.initialTime;
         this.gameOver = false;
         this.updateText();
-        this.sound.play('mainTheme', { loop: true });
+        this.music = this.sound.add('mainTheme', {
+            loop: true,
+        }) as HTML5AudioSound;
+        this.music.setVolume(0.8);
+        this.music.play();
     }
 
     private createClock() {
@@ -95,15 +106,6 @@ export class GameScene extends Scene {
         this.movables.add(c);
     }
     private createWall() {
-        if (this.newClockSpawn > 0) {
-            this.time.delayedCall(
-                this.gameManager.wallPreventionTime,
-                this.createWall,
-                [],
-                this
-            );
-            return;
-        }
         const range = this.sys.canvas.height - this.gameManager.wallHeight;
         const random = Math.random();
         const y = range * random;
@@ -125,6 +127,7 @@ export class GameScene extends Scene {
     }
 
     public update(): void {
+        this.music.setRate(this.gameManager.gameMusicRate);
         this.copter.update();
         if (this.gameOver) {
             this.add.text(300, 200, 'Game Over!', { fontSize: 36 });
@@ -170,7 +173,7 @@ export class GameScene extends Scene {
     }
 
     private setGameOver() {
-        this.sound.stopAll();
+        this.music.stop();
         this.gameOver = true;
         this.copter.stop();
         this.copter.gameOver();

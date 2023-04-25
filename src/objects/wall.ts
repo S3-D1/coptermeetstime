@@ -20,12 +20,13 @@ export class Wall extends Phaser.GameObjects.Image {
         // image
         this.setScale(1);
         this.setOrigin(0, 0);
+        this.setSize(12, args.height);
 
         // physics
         this.body = new Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
         this.body.allowGravity = false;
-        this.body.setSize(20, args.height);
+        this.body.setSize(12, args.height);
         this.scene.add.existing(this);
     }
 }

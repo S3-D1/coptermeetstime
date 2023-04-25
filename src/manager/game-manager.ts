@@ -21,6 +21,8 @@ export class GameManager {
     public copterAcceleration!: number;
     public copterGravity!: number;
 
+    public gameMusicRate!: number;
+
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
     }
@@ -29,8 +31,8 @@ export class GameManager {
         this.groundMinSize = 20;
         this.groundMaxVariableSize = 65;
 
-        this.wallMinDistanceInSeconds = 0.5;
-        this.wallMaxVariableDistanceInSeconds = 3;
+        this.wallMinDistanceInSeconds = 2;
+        this.wallMaxVariableDistanceInSeconds = 4;
 
         this.gameVelocity = -200;
         this.clockTime = 10;
@@ -43,6 +45,8 @@ export class GameManager {
         this.copterMinSpeed = 0;
         this.copterAcceleration = 30;
         this.copterGravity = 800;
+
+        this.gameMusicRate = 1.0;
     }
 
     setGameVelocity(newValue: number, setForTime: number = 0) {
