@@ -117,7 +117,7 @@ export class GameScene extends Scene {
     public update(): void {
         this.copter.update();
         if (this.gameOver) {
-            this.add.text(360, 240, 'Game Over!');
+            this.add.text(300, 200, 'Game Over!', { fontSize: 36 });
             this.time.delayedCall(
                 this.gameManager.restartTime,
                 this.restart,
@@ -187,9 +187,6 @@ export class GameScene extends Scene {
     }
 
     private loadAssets(): void {
-        this.load.image('ground', 'assets/ground-long.png');
-        this.load.image('clock', 'assets/clock.png');
-        this.load.image('copter', 'assets/copter.png');
         this.load.spritesheet('wall', 'assets/ground-long.png', {
             frameWidth: 20,
             frameHeight: this.gameManager.wallHeight,

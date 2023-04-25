@@ -1,9 +1,4 @@
 import { Scene } from 'phaser';
-export interface InitArgs {
-    reason: string;
-    score: number;
-}
-
 export class MenuScene extends Scene {
     private startKey!: Phaser.Input.Keyboard.Key;
 
@@ -11,37 +6,22 @@ export class MenuScene extends Scene {
         super({ key: 'MenuScene' });
     }
 
-    init(data: InitArgs): void {
+    init(): void {
         this.startKey = this.input.keyboard!.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
         this.startKey.isDown = false;
-        switch (data.reason) {
-            case 'start':
-                this.add.text(300, 100, 'Welcome to Copter meets Time!');
-                break;
-            case 'fail':
-                if (data.score > 30) {
-                    this.add.text(
-                        300,
-                        100,
-                        'Well Done! Try Again: Copter meets Time'
-                    );
-                } else {
-                    this.add.text(
-                        300,
-                        100,
-                        'NOOB! Try Again: Copter meets Time'
-                    );
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     create(): void {
-        this.add.text(300, 200, 'Press [SPACE], Click or Touch to start');
+        this.add.text(100, 100, 'This is Copter meets Time!', {
+            fontSize: 36,
+        });
+        const copter = this.add.image(360, 250, 'copter');
+        copter.setScale(3, 3);
+        this.add.text(100, 340, 'Press [SPACE], Click or Touch to start', {
+            fontSize: 24,
+        });
     }
 
     update() {
