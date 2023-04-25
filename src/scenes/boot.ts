@@ -11,7 +11,10 @@ export class BootScene extends Phaser.Scene {
         this.load.audio('mainTheme', 'assets/MainTheme.wav');
         this.load.image('ground', 'assets/ground-long.png');
         this.load.image('clock', 'assets/clock.png');
-        this.load.image('copter', 'assets/copter.png');
+        this.load.spritesheet('copter', 'assets/copter.png', {
+            frameWidth: 42,
+            frameHeight: 25,
+        });
 
         this.add.text(100, 100, 'This is Copter meets Time!', {
             fontSize: 36,
