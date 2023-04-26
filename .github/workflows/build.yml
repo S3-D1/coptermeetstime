@@ -21,10 +21,11 @@ jobs:
       with:
         node-version: 18
 
+    - name: Prepare dependencies
+      run: yarn
+
     - name: Lint
-      run: |
-        yarn
-        yarn lint
+      run: yarn lint
 
     - name: Build
       run: yarn build
@@ -35,7 +36,7 @@ jobs:
       with:
         ref: gh-pages
         path: temp
-    - name: deploy to GitHub Pages
+    - name: prepare commit
       if: success() && github.ref == 'refs/heads/main'
       run: |
         cd temp
@@ -44,5 +45,13 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
+        if git diff-index --quiet HEAD; then
+            echo "changes_exist=true" >> $GITHUB_ENV
+        else
+            echo "changes_exist=false" >> $GITHUB_ENV
+        fi
+        
+    - name: deploy to GitHub Pages
+      if: success() && github.ref == 'refs/heads/main' && env.changes_exist == 'true'
         git commit -m "generated"
         git push
