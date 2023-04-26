@@ -5,6 +5,11 @@ We take part at the Flash Revival Challenge and refer to https://www.crazygames.
 
 We have contributed the version https://github.com/S3-D1/coptermeetstime/commit/cf8d12c36d5ba9b28523cc50aa2b6fd7b582a50f
 
+## Play
+
+* on [itch.io](https://s3-d1.itch.io/copter-meets-time)
+* on [GitHub Pages](https://s3-d1.github.io/coptermeetstime)
+
 ## Known Issues
 
 * Sometimes there is a glitch with the boundaries.
