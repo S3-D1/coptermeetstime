@@ -53,5 +53,5 @@ jobs:
     - name: deploy to GitHub Pages
       if: success() && github.ref == 'refs/heads/main' && env.changes_exist == 'true'
       run: |
-        git commit -m "generated"
+        git commit -m "deploy version ${{ github.sha }}"
         git push
