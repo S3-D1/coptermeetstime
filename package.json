@@ -19,7 +19,7 @@
     "phaser": "3.60.0",
     "phaser-import-pipeline": "^3.0.0",
     "prettier": "^2.8.8",
-    "ts-loader": "^9.2.6",
+    "ts-loader": "^9.4.4",
     "tslint": "^6.1.3",
     "typescript": "^5.0.4",
     "webpack": "^5.82.1",
