@@ -3374,10 +3374,10 @@ phaser-import-pipeline@^3.0.0:
   dependencies:
     rc-config-loader "^3.0.0"
 
-phaser@3.87.0:
-  version "3.87.0"
-  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.87.0.tgz#209f1673b311a3f76d59f14b785699709a8f9cf5"
-  integrity sha512-AyI1b3T5fp05gzf6WUmu2FNqaZL+Y7w88yBRLf7YZXF9bncUSHpnDrupnTGoPqy/RKHRLBcay7zWeqQ2wiMWcw==
+phaser@3.88.0:
+  version "3.88.0"
+  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.88.0.tgz#6d57f3273ec437299ff61c7f216b6dfbdc034aae"
+  integrity sha512-VLhKMjFBaoSQQU2Q9tqic7gfIrRjX9xqWi1BooFNB2pO2ssTzU4nNOirW8oUXrM/GPgtIR8xNoXmdYmqeKcZrw==
   dependencies:
     eventemitter3 "^5.0.1"
 
